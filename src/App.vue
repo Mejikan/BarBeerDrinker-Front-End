@@ -1,5 +1,5 @@
 <template>
-	<v-app>
+	<v-app :dark="useDark">
 		<v-toolbar app>
 			<v-toolbar-title class="headline text-uppercase">
 				<span>Liquor Insights </span>
@@ -8,42 +8,78 @@
 			<v-spacer></v-spacer>
 			<v-btn
 				flat
-				target="_blank"
+				to="/"
+			>
+				<span class="mr-2">Home</span>
+			</v-btn>
+			<v-btn
+				flat
+				to="/drinker"
 			>
 				<span class="mr-2">Drinker</span>
 			</v-btn>
 			<v-btn
 				flat
-				target="_blank"
+				to="/bar"
 			>
 				<span class="mr-2">Bar</span>
 			</v-btn>
 			<v-btn
 				flat
-				target="_blank"
+				to="/beer"
 			>
 				<span class="mr-2">Beer</span>
 			</v-btn>
+			<v-menu offset-y>
+				<v-btn
+					fab
+					flat
+					slot="activator"
+				>
+					<v-icon>settings</v-icon>
+				</v-btn>
+				<v-card>
+					<v-card-text>
+					<h4>Toggle Theme</h4>
+					<span>
+						<v-switch right
+							label="Dark Theme"
+							v-model="useDark"
+						></v-switch>
+					</span>
+					</v-card-text>
+				</v-card>
+			</v-menu>
 		</v-toolbar>
 
 		<v-content>
-			<HelloWorld/>
+			<transition name="fade">
+				<router-view></router-view>
+			</transition>
 		</v-content>
+
+		<v-footer
+			height="auto"
+		>
+			<v-container fluid grid-list-md><v-layout row wrap><v-flex xs12>
+				<div class="text-xs-right">
+					Group 32 | <strong>Kevin Toft and Lawrence Yong</strong>
+					<v-spacer></v-spacer>
+					&copy;{{ new Date().getFullYear() }}
+				</div>
+			</v-flex></v-layout></v-container>
+		</v-footer>
 	</v-app>
 </template>
 
-<script>
-import HelloWorld from "./components/HelloWorld";
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
 
-export default {
-	name: "App",
+@Component({
 	components: {
-		HelloWorld,
 	},
-	data() {
-		return {
-			//
-		};
-	},
-};
+})
+export default class App extends Vue {
+	public useDark: boolean = false;
+}
 </script>

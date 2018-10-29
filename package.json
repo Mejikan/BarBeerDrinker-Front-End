@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chart.js": "^2.7.3",
     "dotenv": "^6.1.0",
     "vue": "^2.5.17",
+    "vue-chartjs": "^3.4.0",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
     "vue-router": "^3.0.1",
