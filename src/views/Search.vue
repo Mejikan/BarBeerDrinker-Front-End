@@ -48,7 +48,7 @@ export default class Search extends Vue {
 	private async valueCallback() {
 		console.log(this.selection)
 
-	const queryGet = await Axios.get("localhost:8081/something/something")
+	const queryGet = await Axios.get("http://localhost:8081/something/something")
 	console.log(queryGet)
 	}
 }
