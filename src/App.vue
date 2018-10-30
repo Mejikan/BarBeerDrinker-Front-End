@@ -30,6 +30,12 @@
 			>
 				<span class="mr-2">Beer</span>
 			</v-btn>
+			<v-btn
+				flat
+				to="/search"
+			>
+				<span class="mr-2">Search</span>
+			</v-btn>
 			<v-menu offset-y>
 				<v-btn
 					fab
