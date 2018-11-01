@@ -38,6 +38,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 import axios from "axios";
+import { Env } from "@/env";
 import Chart from "@/components/Chart.vue";
 
 @Component({
@@ -66,7 +67,7 @@ export default class Bar extends Vue {
 	private tableRows: any[] = [];
 
 	private async setTableRows(): Promise<void> {
-		let fullURL: string = "http://localhost:8081/something/something?q=";
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
 		fullURL += encodeURIComponent("SELECT * FROM BarBeerDrinker.bars LIMIT 20");
 		const response = await axios.get(fullURL);
 		let results: any[] = [];
