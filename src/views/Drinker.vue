@@ -53,7 +53,6 @@ export default class Drinker extends Vue {
 		{
 			text: "Name",
 			align: "left",
-			sortable: false,
 			value: "name",
 		},
 		{ text: "City", value: "city" },
@@ -65,8 +64,8 @@ export default class Drinker extends Vue {
 	private tableRows: any[] = [];
 
 	private barChartLabels: string[] = ["January", "February", "March", "April",
-"May", "June", "July", "August", "September",
-			"October", "November", "December"];
+		"May", "June", "July", "August", "September",
+		"October", "November", "December"];
 
 	private barChartData: any[] = [
 				{
@@ -75,8 +74,49 @@ export default class Drinker extends Vue {
 					data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
 				},
 			];
+	
+	/**
+	 * Show all drinker's transactions ordered by time and grouped by different bars
+	 */
+	private queryTrans(drinker: string): string {
+		return `SELECT * FROM BarBeerDrinker.transaction t
+				WHERE t.drinker = '${drinker}'
+				ORDER BY t.bar, t.time;`;
+	}
 
-	private async setTableRows(): Promise<void> {
+	/**
+	 * Show all drinker's items by what the drinker orders the most
+	 */
+	private queryOrdersMost(drinker: string): string {
+		return `SELECT item, item_type, amount FROM
+				(SELECT bc.item, COUNT(*) as amount
+				FROM BarBeerDrinker.billContains bc
+				WHERE bc.trans_id IN
+				(SELECT t.trans_id FROM BarBeerDrinker.transaction t
+				WHERE t.drinker = '${drinker}')
+				GROUP BY bc.item
+				ORDER BY amount DESC) i1
+				LEFT JOIN BarBeerDrinker.items i2 ON i2.item_name = i1.item;`;
+	}
+
+	/**
+	 * Show drinker's spending in different bars, on different dates/weeks/months
+	 */
+	private querySpending(drinker: string, day?: number): string {
+		if (day) {
+			return `SELECT *, SUM(t.total) as total_paid
+					FROM BarBeerDrinker.transaction t
+					WHERE t.drinker = '${drinker}' AND t.day = ${day}
+					GROUP BY t.bar;`;
+		} else {
+			return `SELECT *, SUM(t.total) as total_paid
+					FROM BarBeerDrinker.transaction t
+					WHERE t.drinker = '${drinker}'
+					GROUP BY t.bar;`;
+		}
+	}
+
+	private async setTransactions(drinker: string): Promise<void> {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
 		fullURL += encodeURIComponent("SELECT * FROM BarBeerDrinker.drinkers LIMIT 200");
 		const response = await axios.get(fullURL);
@@ -102,7 +142,7 @@ export default class Drinker extends Vue {
 	}
 
 	private mounted() {
-		this.setTableRows();
+		this.setTransactions("Andrea Ho");
 	}
 }
 </script>
