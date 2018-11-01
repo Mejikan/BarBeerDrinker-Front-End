@@ -64,7 +64,8 @@ export default class Drinker extends Vue {
 
 	private tableRows: any[] = [];
 
-	private barChartLabels: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+	private barChartLabels: string[] = ["January", "February", "March", "April",
+"May", "June", "July", "August", "September",
 			"October", "November", "December"];
 
 	private barChartData: any[] = [
