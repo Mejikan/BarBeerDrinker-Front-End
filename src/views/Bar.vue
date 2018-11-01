@@ -25,7 +25,7 @@
 									<td>{{ props.item.day }}</td>
 								</template>
 							</v-data-table>
-							<Chart/>
+							<BarChart/>
 						</v-card-text>
 					</v-card>
 				</v-flex>
@@ -39,11 +39,11 @@ import { Component, Vue } from "vue-property-decorator";
 
 import axios from "axios";
 import { Env } from "@/env";
-import Chart from "@/components/Chart.vue";
+import BarChart from "@/components/BarChart.vue";
 
 @Component({
 	components: {
-		Chart,
+		BarChart,
 	},
 })
 
@@ -70,10 +70,10 @@ export default class Bar extends Vue {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
 		fullURL += encodeURIComponent("SELECT * FROM BarBeerDrinker.bars LIMIT 20");
 		const response = await axios.get(fullURL);
-		let results: any[] = [];
+		const results: any[] = [];
 		if (response.status === 200) {
 			const rows: any[] = response.data as any[];
-			for (let row of rows) {
+			for (const row of rows) {
 				const result = {
 					value: false,
 					name: row.name,
@@ -84,8 +84,8 @@ export default class Bar extends Vue {
 					closes: row.closes,
 					phone: row.phone,
 					day: row.day,
-				}
-				results.push(result); 
+				};
+				results.push(result);
 				console.log(result);
 			}
 			this.tableRows = results;

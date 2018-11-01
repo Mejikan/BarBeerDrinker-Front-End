@@ -38,13 +38,13 @@ import { Env } from "@/env";
 
 export default class Search extends Vue {
 
-	private items : string[] = ["Foo", "Bar", "Fizz", "Buzz"] 
-	private selection : string = "foo"
+	private items: string[] = ["Foo", "Bar", "Fizz", "Buzz"];
+	private selection: string = "foo";
 	private mounted() {
 		//
 	}
 	private async valueCallback() {
-		console.log(this.selection)
+		console.log(this.selection);
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
 		fullURL += encodeURIComponent("SELECT * from BarBeerDrinker.bars");
 		const queryGet = await axios.get(fullURL);

@@ -22,7 +22,10 @@
 									<td>{{ props.item.addr }}</td>
 								</template>
 							</v-data-table>
-							<Chart/>
+							<BarChart
+								:labels="barChartLabels"
+								:datasets="barChartData"
+							/>
 						</v-card-text>
 					</v-card>
 				</v-flex>
@@ -36,11 +39,11 @@ import { Component, Vue } from "vue-property-decorator";
 
 import axios from "axios";
 import { Env } from "@/env";
-import Chart from "@/components/Chart.vue";
+import BarChart from "@/components/BarChart.vue";
 
 @Component({
 	components: {
-		Chart,
+		BarChart,
 	},
 })
 
@@ -61,14 +64,25 @@ export default class Drinker extends Vue {
 
 	private tableRows: any[] = [];
 
+	private barChartLabels: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+			"October", "November", "December"];
+
+	private barChartData: any[] = [
+				{
+					label: "GitHub Commits",
+					backgroundColor: "#f87979",
+					data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
+				},
+			];
+
 	private async setTableRows(): Promise<void> {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
 		fullURL += encodeURIComponent("SELECT * FROM BarBeerDrinker.drinkers LIMIT 200");
 		const response = await axios.get(fullURL);
-		let results: any[] = [];
+		const results: any[] = [];
 		if (response.status === 200) {
 			const rows: any[] = response.data as any[];
-			for (let row of rows) {
+			for (const row of rows) {
 				const result = {
 					value: false,
 					name: row.name,
@@ -76,8 +90,8 @@ export default class Drinker extends Vue {
 					state: row.state,
 					phone: row.phone,
 					addr: row.addr,
-				}
-				results.push(result); 
+				};
+				results.push(result);
 				console.log(result);
 			}
 			this.tableRows = results;
