@@ -10,7 +10,7 @@
 						<v-card-text>
 							<v-data-table
 								:headers="tableHeaders"
-								:items="tableRows"
+								:items="tableRows" 
 								hide-actions
 								class="elevation-1"
 							>
@@ -62,7 +62,7 @@ export default class Drinker extends Vue {
 
 	private async setTableRows(): Promise<void> {
 		let fullURL: string = "http://localhost:8081/something/something?q=";
-		fullURL += encodeURIComponent("SELECT * FROM BarBeerDrinker.drinkers LIMIT 20");
+		fullURL += encodeURIComponent("SELECT * FROM BarBeerDrinker.drinkers LIMIT 200");
 		const response = await axios.get(fullURL);
 		let results: any[] = [];
 		if (response.status === 200) {
