@@ -3,31 +3,93 @@
 		<v-container fluid>
 			<v-layout row wrap>
 				<v-flex xs12>
-					<v-card>
-						<v-card-title class="headline">
-							Drinker Name
-						</v-card-title>
-						<v-card-text>
-							<v-data-table
-								:headers="tableHeaders"
-								:items="tableRows" 
-								hide-actions
-								class="elevation-1"
+
+					<v-toolbar
+						tabs
+						>
+						<v-text-field
+							type="text"
+							v-model="drinker"
+							class="mx-3"
+							label="Search by drinker"
+							hint="For example: Catherine Faulkner"
+							append-icon="search"
+							clear-icon="mdi-close-circle"
+							clearable
+							autofocus
+							solo
+							@click:append="retrieveDrinkerData"
+							@keyup.enter="retrieveDrinkerData"
+						></v-text-field>
+
+						<v-tabs
+							slot="extension"
+							v-model="tabs"
+							centered
+							color="transparent"
 							>
-								<template slot="items" slot-scope="props">
-									<td>{{ props.item.name }}</td>
-									<td>{{ props.item.city }}</td>
-									<td>{{ props.item.state }}</td>
-									<td>{{ props.item.phone }}</td>
-									<td>{{ props.item.addr }}</td>
-								</template>
-							</v-data-table>
-							<BarChart
-								:labels="barChartLabels"
-								:datasets="barChartData"
-							/>
-						</v-card-text>
-					</v-card>
+							<v-tab :key="1">
+								Transactions
+							</v-tab>
+							<v-tab :key="2">
+								Most Ordered
+							</v-tab>
+							<v-tab :key="3">
+								Spending
+							</v-tab>
+						</v-tabs>
+					</v-toolbar>
+
+					<v-tabs-items v-model="tabs">
+						<v-tab-item :key="1">
+							<v-card>
+								<v-card-title>
+								</v-card-title>
+								<v-card-text>
+									<v-data-table
+										:headers="tableHeaders"
+										:items="tableRows" 
+										hide-actions
+										class="elevation-1"
+									>
+										<template slot="items" slot-scope="props">
+											<td>{{ props.item.bar }}</td>
+											<td>{{ props.item.day }}</td>
+											<td>{{ props.item.time }}</td>
+											<td>{{ props.item.trans_id }}</td>
+											<td>${{ props.item.total.toFixed(2) }}</td>
+											<td>${{ props.item.tip.toFixed(2) }}</td>
+										</template>
+									</v-data-table>
+								</v-card-text>
+							</v-card>
+						</v-tab-item>
+						<v-tab-item :key="2">
+							<v-card>
+								<v-card-title>
+								</v-card-title>
+								<v-card-text>
+									<BarChart
+										:chartData="mostOrderChartData"
+										:options="mostOrderChartOptions"
+									/>
+								</v-card-text>
+							</v-card>
+						</v-tab-item>
+						<v-tab-item :key="3">
+							<v-card>
+								<v-card-title>
+								</v-card-title>
+								<v-card-text>
+									<HorzBarChart
+										:chartData="spendingChartData"
+										:options="spendingChartOptions"
+									/>
+								</v-card-text>
+							</v-card>
+						</v-tab-item>
+					</v-tabs-items>
+
 				</v-flex>
 			</v-layout>
 		</v-container>
@@ -40,41 +102,78 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { Env } from "@/env";
 import BarChart from "@/components/BarChart.vue";
+import HorzBarChart from "@/components/HorzBarChart.vue";
 
 @Component({
 	components: {
 		BarChart,
+		HorzBarChart,
 	},
 })
 
 export default class Drinker extends Vue {
 
+	private tabs: any = null;
+
+	private drinker: string = "";
+
+	private formValid: boolean = true;
+
 	private tableHeaders: any[] = [
 		{
-			text: "Name",
+			text: "Bar",
 			align: "left",
-			value: "name",
+			value: "bar",
 		},
-		{ text: "City", value: "city" },
-		{ text: "State", value: "state" },
-		{ text: "Phone", value: "phone" },
-		{ text: "Address", value: "addr" },
+		{ text: "Day", value: "day" },
+		{ text: "Time", value: "time" },
+		{ text: "Transaction ID", value: "trans_id" },
+		{ text: "Total", value: "total" },
+		{ text: "Tip", value: "tip" },
 	];
 
 	private tableRows: any[] = [];
 
-	private barChartLabels: string[] = ["January", "February", "March", "April",
-		"May", "June", "July", "August", "September",
-		"October", "November", "December"];
+	private mostOrderChartData: any = {};
 
-	private barChartData: any[] = [
-				{
-					label: "GitHub Commits",
-					backgroundColor: "#f87979",
-					data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
-				},
-			];
-	
+	private mostOrderChartOptions: any = {
+			responsive: true,
+			maintainAspectRatio: true,
+			scales: {
+				xAxes: [
+					{
+						ticks: { autoSkip: false },
+					},
+				],
+				yAxes: [
+					{
+						ticks: { beginAtZero: true },
+					},
+				],
+			},
+		};
+
+	private spendingChartData: any = {};
+
+	private spendingChartOptions: any = {
+			responsive: true,
+			maintainAspectRatio: true,
+			scales: {
+				xAxes: [
+					{
+						ticks: { autoSkip: false },
+						stacked: true,
+					},
+				],
+				yAxes: [
+					{
+						ticks: { beginAtZero: true },
+						stacked: true,
+					},
+				],
+			},
+		};
+
 	/**
 	 * Show all drinker's transactions ordered by time and grouped by different bars
 	 */
@@ -104,12 +203,12 @@ export default class Drinker extends Vue {
 	 */
 	private querySpending(drinker: string, day?: number): string {
 		if (day) {
-			return `SELECT *, SUM(t.total) as total_paid
+			return `SELECT t.bar, SUM(t.tip) as sum_tip, SUM(t.total) as sum_total
 					FROM BarBeerDrinker.transaction t
 					WHERE t.drinker = '${drinker}' AND t.day = ${day}
 					GROUP BY t.bar;`;
 		} else {
-			return `SELECT *, SUM(t.total) as total_paid
+			return `SELECT t.bar, SUM(t.tip) as sum_tip, SUM(t.total) as sum_total
 					FROM BarBeerDrinker.transaction t
 					WHERE t.drinker = '${drinker}'
 					GROUP BY t.bar;`;
@@ -118,7 +217,7 @@ export default class Drinker extends Vue {
 
 	private async setTransactions(drinker: string): Promise<void> {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
-		fullURL += encodeURIComponent("SELECT * FROM BarBeerDrinker.drinkers LIMIT 200");
+		fullURL += encodeURIComponent(this.queryTrans(drinker));
 		const response = await axios.get(fullURL);
 		const results: any[] = [];
 		if (response.status === 200) {
@@ -126,14 +225,16 @@ export default class Drinker extends Vue {
 			for (const row of rows) {
 				const result = {
 					value: false,
-					name: row.name,
-					city: row.city,
-					state: row.state,
-					phone: row.phone,
-					addr: row.addr,
+					trans_id: parseInt(row.trans_id, 10),
+					day: parseInt(row.day, 10),
+					time: row.time,
+					bar: row.bar,
+					drinker: row.drinker,
+					tip: parseFloat(row.tip),
+					total: parseFloat(row.total),
 				};
 				results.push(result);
-				console.log(result);
+				// console.log(result); // debug
 			}
 			this.tableRows = results;
 		} else {
@@ -141,8 +242,91 @@ export default class Drinker extends Vue {
 		}
 	}
 
+	private async setCommonOrders(drinker: string): Promise<void> {
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryOrdersMost(drinker));
+		const response = await axios.get(fullURL);
+		if (response.status === 200) {
+			const rows: any[] = response.data as any[];
+
+			const beerNames: string[] = [];
+			const beerCount: number[] = [];
+			const foodNames: string[] = [];
+			const foodCount: number[] = [];
+			for (const row of rows) {
+				if (row.item_type === "beer") { // filter beer
+					beerNames.push(row.item);
+					beerCount.push(parseInt(row.amount, 10));
+				} else if (row.item_type === "food") { // filter food
+					foodNames.push(row.item);
+					foodCount.push(parseInt(row.amount, 10));
+				}
+			}
+			this.mostOrderChartData = {
+				labels: beerNames,
+				datasets: [
+					{
+						label: "Beers",
+						backgroundColor: "rgba(0, 127, 255, 0.65)",
+						data: beerCount,
+					},
+				],
+			};
+		} else {
+			console.error("Failed to get data");
+		}
+	}
+
+	private async setSpending(drinker: string): Promise<void> {
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.querySpending(drinker));
+		const response = await axios.get(fullURL);
+		if (response.status === 200) {
+			const rows: any[] = response.data as any[];
+
+			const bars: string[] = [];
+			const tips: number[] = [];
+			const totals: number[] = [];
+			for (const row of rows) {
+				bars.push(row.bar);
+				const tip: number = parseFloat(row.sum_tip);
+				const total: number = parseFloat(row.sum_total);
+				tips.push(tip);
+				totals.push(total);
+			}
+			this.spendingChartData = {
+				labels: bars,
+				datasets: [
+					{
+						label: "Paid (no tip)",
+						backgroundColor: "rgba(255, 0, 0, 0.65)",
+						data: totals,
+					},
+					{
+						label: "Tip",
+						backgroundColor: "rgba(192, 192, 0, 0.65)",
+						data: tips,
+					},
+				],
+			};
+		} else {
+			console.error("Failed to get data");
+		}
+	}
+
+	private async retrieveDrinkerData(): Promise<void> {
+		this.setTransactions(this.drinker);
+		this.setCommonOrders(this.drinker);
+		this.setSpending(this.drinker);
+	}
+
 	private mounted() {
-		this.setTransactions("Andrea Ho");
+		if (this.$route.params.name) {
+			this.drinker = this.$route.params.name;
+			if (this.drinker.trim().length > 0) {
+				this.retrieveDrinkerData();
+			}
+		}
 	}
 }
 </script>
