@@ -1,0 +1,593 @@
+[
+	{
+		"item_name" : "077XX"
+	},
+	{
+		"item_name" : "1492"
+	},
+	{
+		"item_name" : "312 Urban Pale Ale"
+	},
+	{
+		"item_name" : "312 Urban Wheat Ale"
+	},
+	{
+		"item_name" : "543 Skull Creek Fresh Hopped Pale Ale"
+	},
+	{
+		"item_name" : "Akari Shogun American Wheat Ale"
+	},
+	{
+		"item_name" : "All American Blonde Ale"
+	},
+	{
+		"item_name" : "American Red Porter"
+	},
+	{
+		"item_name" : "Angry Orchard Crisp Apple"
+	},
+	{
+		"item_name" : "Arjuna"
+	},
+	{
+		"item_name" : "Arkansas Red"
+	},
+	{
+		"item_name" : "Awry Rye Pale Ale"
+	},
+	{
+		"item_name" : "Back East Ale"
+	},
+	{
+		"item_name" : "Back in Black"
+	},
+	{
+		"item_name" : "Barney Flats Oatmeal Stout"
+	},
+	{
+		"item_name" : "Barrio Blanco"
+	},
+	{
+		"item_name" : "Batch 69 IPA"
+	},
+	{
+		"item_name" : "Beach Patrol"
+	},
+	{
+		"item_name" : "Beasts A'Burnin'"
+	},
+	{
+		"item_name" : "Beaver Logger"
+	},
+	{
+		"item_name" : "Behemoth"
+	},
+	{
+		"item_name" : "Bent Paddle Black Ale"
+	},
+	{
+		"item_name" : "Big Elm IPA"
+	},
+	{
+		"item_name" : "Big Star White IPA"
+	},
+	{
+		"item_name" : "Bikini Beer"
+	},
+	{
+		"item_name" : "Black Exodus"
+	},
+	{
+		"item_name" : "Blonde Czich"
+	},
+	{
+		"item_name" : "Blood Orange Honey"
+	},
+	{
+		"item_name" : "Boy King"
+	},
+	{
+		"item_name" : "Bozone Hefe Weizen"
+	},
+	{
+		"item_name" : "Bring Back the Beach Blonde Ale"
+	},
+	{
+		"item_name" : "Brotherhood Steam"
+	},
+	{
+		"item_name" : "Brush Creek Blonde"
+	},
+	{
+		"item_name" : "Burning Bush Smoked IPA"
+	},
+	{
+		"item_name" : "Caldera IPA"
+	},
+	{
+		"item_name" : "Category 3 IPA"
+	},
+	{
+		"item_name" : "Cherny Bock"
+	},
+	{
+		"item_name" : "Chugach Session Ale"
+	},
+	{
+		"item_name" : "Churchkey Pilsner Style Beer"
+	},
+	{
+		"item_name" : "Citra Ass Down"
+	},
+	{
+		"item_name" : "Clean Shave IPA"
+	},
+	{
+		"item_name" : "Cone Crusher"
+	},
+	{
+		"item_name" : "Contemplation"
+	},
+	{
+		"item_name" : "Copperhead Amber"
+	},
+	{
+		"item_name" : "Coq D'Or"
+	},
+	{
+		"item_name" : "Coq de la Marche"
+	},
+	{
+		"item_name" : "Core Oatmeal Stout"
+	},
+	{
+		"item_name" : "Country Boy IPA"
+	},
+	{
+		"item_name" : "Cut Throat Pale Ale"
+	},
+	{
+		"item_name" : "Dead Armadillo Amber Ale"
+	},
+	{
+		"item_name" : "Deadicated Amber"
+	},
+	{
+		"item_name" : "Devils Tramping Ground Tripel"
+	},
+	{
+		"item_name" : "Divided Sky"
+	},
+	{
+		"item_name" : "Dolores River ESB"
+	},
+	{
+		"item_name" : "Double Brown Stout"
+	},
+	{
+		"item_name" : "Dry Dock Amber Ale"
+	},
+	{
+		"item_name" : "Dry Hard Apple Cider"
+	},
+	{
+		"item_name" : "Dubbelicious"
+	},
+	{
+		"item_name" : "Dundee Summer Wheat Beer"
+	},
+	{
+		"item_name" : "East India Pale Ale"
+	},
+	{
+		"item_name" : "Easy Livin' Summer Ale"
+	},
+	{
+		"item_name" : "El Hefe Speaks"
+	},
+	{
+		"item_name" : "Fall Hornin'"
+	},
+	{
+		"item_name" : "Farmer Ted's Farmhouse Cream Ale"
+	},
+	{
+		"item_name" : "Farmer Wirtz India Pale Ale"
+	},
+	{
+		"item_name" : "Fearless Scottish Ale"
+	},
+	{
+		"item_name" : "Field 41 Pale Ale"
+	},
+	{
+		"item_name" : "Firewater India Pale Ale"
+	},
+	{
+		"item_name" : "First Press"
+	},
+	{
+		"item_name" : "Fisherman's Brew"
+	},
+	{
+		"item_name" : "Flesh Gourd'n"
+	},
+	{
+		"item_name" : "FMB 101"
+	},
+	{
+		"item_name" : "Fort Pitt Ale"
+	},
+	{
+		"item_name" : "Four String Vanilla Porter"
+	},
+	{
+		"item_name" : "Freeride APA"
+	},
+	{
+		"item_name" : "General George Patton Pilsner"
+	},
+	{
+		"item_name" : "Ginja Ninja"
+	},
+	{
+		"item_name" : "Good People Pale Ale"
+	},
+	{
+		"item_name" : "Gossamer Golden Ale"
+	},
+	{
+		"item_name" : "Great Crescent Belgian Style Wit"
+	},
+	{
+		"item_name" : "Great Crescent Blonde Ale"
+	},
+	{
+		"item_name" : "Great Crescent IPA"
+	},
+	{
+		"item_name" : "Green Bullet Organic India Pale Ale"
+	},
+	{
+		"item_name" : "Green Collar"
+	},
+	{
+		"item_name" : "Greenbelt Farmhouse Ale"
+	},
+	{
+		"item_name" : "Gutch English Style Mild Ale"
+	},
+	{
+		"item_name" : "Gyptoberfest"
+	},
+	{
+		"item_name" : "Hardcore Chimera"
+	},
+	{
+		"item_name" : "Harvest Ale"
+	},
+	{
+		"item_name" : "Heavy Lifting"
+	},
+	{
+		"item_name" : "Heinnieweisse Weissebier"
+	},
+	{
+		"item_name" : "Here Gose Nothin'"
+	},
+	{
+		"item_name" : "Hop Stalker Fresh Hop IPA"
+	},
+	{
+		"item_name" : "HopArt"
+	},
+	{
+		"item_name" : "Hopkick Dropkick"
+	},
+	{
+		"item_name" : "Hopportunity Knocks IPA"
+	},
+	{
+		"item_name" : "Horny Toad Cerveza"
+	},
+	{
+		"item_name" : "Incredible Pedal IPA"
+	},
+	{
+		"item_name" : "Insert Hop Reference"
+	},
+	{
+		"item_name" : "Jade"
+	},
+	{
+		"item_name" : "Jalapeno Pale Ale"
+	},
+	{
+		"item_name" : "Kaleidoscope Collaboration 2012"
+	},
+	{
+		"item_name" : "Kilt Dropper Scotch Ale"
+	},
+	{
+		"item_name" : "Little Boss"
+	},
+	{
+		"item_name" : "Little Sister India Style Session Ale"
+	},
+	{
+		"item_name" : "Live Local Golden Ale"
+	},
+	{
+		"item_name" : "London Balling"
+	},
+	{
+		"item_name" : "Lost Sailor IPA"
+	},
+	{
+		"item_name" : "Lucky Buck"
+	},
+	{
+		"item_name" : "Maduro Brown Ale"
+	},
+	{
+		"item_name" : "MCA"
+	},
+	{
+		"item_name" : "Mirror Pond Pale Ale"
+	},
+	{
+		"item_name" : "Misty Mountain IPA"
+	},
+	{
+		"item_name" : "Moe Lasses'"
+	},
+	{
+		"item_name" : "Moose Drool Brown Ale"
+	},
+	{
+		"item_name" : "Morning Wood"
+	},
+	{
+		"item_name" : "Mountain Fairy Raspberry Wheat"
+	},
+	{
+		"item_name" : "Mountain Livin' Pale Ale"
+	},
+	{
+		"item_name" : "Naked Pig Pale Ale"
+	},
+	{
+		"item_name" : "Newport Storm IPA"
+	},
+	{
+		"item_name" : "Noche Dulce"
+	},
+	{
+		"item_name" : "Norm's Raggedy Ass IPA"
+	},
+	{
+		"item_name" : "North French"
+	},
+	{
+		"item_name" : "Oak Cliff Coffee Ale"
+	},
+	{
+		"item_name" : "Oatmeal PSA"
+	},
+	{
+		"item_name" : "Oberon"
+	},
+	{
+		"item_name" : "OktoberFiesta"
+	},
+	{
+		"item_name" : "Old Detroit"
+	},
+	{
+		"item_name" : "Orange Grove Wheat Ale"
+	},
+	{
+		"item_name" : "Passion Fruit Prussia"
+	},
+	{
+		"item_name" : "Pepper in the Rye"
+	},
+	{
+		"item_name" : "Perzik Saison"
+	},
+	{
+		"item_name" : "Pilot Rock Porter"
+	},
+	{
+		"item_name" : "Plow Horse Belgian Style Imperial Stout"
+	},
+	{
+		"item_name" : "Point the Way IPA"
+	},
+	{
+		"item_name" : "Polar Pale Ale"
+	},
+	{
+		"item_name" : "Pothole Stout"
+	},
+	{
+		"item_name" : "Powder Hound Winter Ale"
+	},
+	{
+		"item_name" : "Psychopomp"
+	},
+	{
+		"item_name" : "Pumpkin Beast"
+	},
+	{
+		"item_name" : "Quick WIT"
+	},
+	{
+		"item_name" : "Quick Wit Belgianesque Ale"
+	},
+	{
+		"item_name" : "Raincloud Robust Porter"
+	},
+	{
+		"item_name" : "Rhode Island Blueberry"
+	},
+	{
+		"item_name" : "Rod Bender Red"
+	},
+	{
+		"item_name" : "Roller Dam Red Ale"
+	},
+	{
+		"item_name" : "Rules are Rules"
+	},
+	{
+		"item_name" : "Rye Pils Session Lager"
+	},
+	{
+		"item_name" : "Rye Porter"
+	},
+	{
+		"item_name" : "Saddle Bronc Brown Ale"
+	},
+	{
+		"item_name" : "Samuel Adams Summer Ale"
+	},
+	{
+		"item_name" : "Sankaty Light Lager"
+	},
+	{
+		"item_name" : "Santa's Secret"
+	},
+	{
+		"item_name" : "Saucy Intruder"
+	},
+	{
+		"item_name" : "Sawtooth Ale"
+	},
+	{
+		"item_name" : "Seiche Scottish Ale"
+	},
+	{
+		"item_name" : "Sex and Candy"
+	},
+	{
+		"item_name" : "Shark Tracker Light lager"
+	},
+	{
+		"item_name" : "Single Engine Red"
+	},
+	{
+		"item_name" : "Sky Blue Golden Ale"
+	},
+	{
+		"item_name" : "Sky High Rye"
+	},
+	{
+		"item_name" : "Solitude"
+	},
+	{
+		"item_name" : "South Ridge Amber Ale"
+	},
+	{
+		"item_name" : "Southern Drawl Pale Lager"
+	},
+	{
+		"item_name" : "Star Runner"
+	},
+	{
+		"item_name" : "Stone's Throw IPA"
+	},
+	{
+		"item_name" : "Strawberry Blonde"
+	},
+	{
+		"item_name" : "Sudice American Stout"
+	},
+	{
+		"item_name" : "Summer Honey"
+	},
+	{
+		"item_name" : "Suncaster Summer Wheat"
+	},
+	{
+		"item_name" : "Tart Side of the Moon"
+	},
+	{
+		"item_name" : "Tender Loving Empire NWPA"
+	},
+	{
+		"item_name" : "Terrace Hill Double IPA"
+	},
+	{
+		"item_name" : "The 26th"
+	},
+	{
+		"item_name" : "The Citizen"
+	},
+	{
+		"item_name" : "The Gadget"
+	},
+	{
+		"item_name" : "The Grand Army"
+	},
+	{
+		"item_name" : "The Lawn Ranger"
+	},
+	{
+		"item_name" : "Thrasher Session India Pale Ale"
+	},
+	{
+		"item_name" : "Toasted Lager"
+	},
+	{
+		"item_name" : "Tree Bucket"
+	},
+	{
+		"item_name" : "Trigger Blonde Ale"
+	},
+	{
+		"item_name" : "Twisted Helles Summer Lager"
+	},
+	{
+		"item_name" : "Underachiever"
+	},
+	{
+		"item_name" : "Underdog Atlantic Lager"
+	},
+	{
+		"item_name" : "Vanilla Java Porter"
+	},
+	{
+		"item_name" : "Verdun"
+	},
+	{
+		"item_name" : "Vertex IPA"
+	},
+	{
+		"item_name" : "Vivant Tripel"
+	},
+	{
+		"item_name" : "Wandering Pelican"
+	},
+	{
+		"item_name" : "Watermelon Ale"
+	},
+	{
+		"item_name" : "West Portal Colorado Common Summer Ale"
+	},
+	{
+		"item_name" : "White Zombie Ale"
+	},
+	{
+		"item_name" : "Whitsun"
+	},
+	{
+		"item_name" : "Wolfman's Berliner"
+	},
+	{
+		"item_name" : "Wrath of Pele"
+	},
+	{
+		"item_name" : "Yo Soy Un Berliner"
+	}
+]
