@@ -3,24 +3,26 @@
 		<v-container fluid>
 			<v-layout row wrap>
 				<v-flex xs12>
-
+					<v-subheader v-show="currentDrinker.length > 0">
+						Displaying data for {{ currentDrinker }}
+					</v-subheader>
 					<v-toolbar
 						tabs
 						>
-						<v-text-field
-							type="text"
-							v-model="drinker"
-							class="mx-3"
-							label="Search by drinker"
-							hint="For example: Catherine Faulkner"
-							append-icon="search"
-							clear-icon="mdi-close-circle"
-							clearable
-							autofocus
-							solo
-							@click:append="retrieveDrinkerData"
-							@keyup.enter="retrieveDrinkerData"
-						></v-text-field>
+						<v-layout justify-center>
+							<v-flex xs12 lg6>
+								<v-autocomplete
+									v-model="drinker"
+									:items="allDrinkerNames"
+									placeholder="Enter a drinker's name"
+									persistent-hint
+									append-icon="search"
+									solo
+									@click:append="retrieveDrinkerData"
+									@keyup.enter="retrieveDrinkerData"
+								></v-autocomplete>
+							</v-flex>
+						</v-layout>
 
 						<v-tabs
 							slot="extension"
@@ -103,6 +105,7 @@ import axios from "axios";
 import { Env } from "@/env";
 import BarChart from "@/components/BarChart.vue";
 import HorzBarChart from "@/components/HorzBarChart.vue";
+import * as drinkerNames from "@/sql/drinkers.json";
 
 @Component({
 	components: {
@@ -112,10 +115,14 @@ import HorzBarChart from "@/components/HorzBarChart.vue";
 })
 
 export default class Drinker extends Vue {
+	private allDrinkerNames: string[] = drinkerNames.drinkers;
 
 	private tabs: any = null;
 
 	private drinker: string = "";
+
+	/** The drinker whose data is currently display. */
+	private currentDrinker: string = "";
 
 	private formValid: boolean = true;
 
@@ -315,9 +322,11 @@ export default class Drinker extends Vue {
 	}
 
 	private async retrieveDrinkerData(): Promise<void> {
-		this.setTransactions(this.drinker);
-		this.setCommonOrders(this.drinker);
-		this.setSpending(this.drinker);
+		await Promise.all([this.setTransactions(this.drinker),
+			this.setCommonOrders(this.drinker),
+			this.setSpending(this.drinker),
+		]);
+		this.currentDrinker = this.drinker;
 	}
 
 	private mounted() {
