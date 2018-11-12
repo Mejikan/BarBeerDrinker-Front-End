@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue";
 import Search from "@/views/Search.vue";
 import Drinker from "@/views/Drinker.vue";
 import Bar from "@/views/Bar.vue";
+import Beer from "@/views/Beer.vue";
 
 Vue.use(Router);
 
@@ -33,6 +34,10 @@ export default new Router({
 		{
 			path: "/drinker",
 			component: Drinker,
+		},
+		{
+			path: "/beer",
+			component: Beer,
 		},
 	],
 });

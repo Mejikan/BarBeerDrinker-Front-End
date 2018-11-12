@@ -1,6 +1,22 @@
 <template>
-	<div class="search">				
-		<v-select
+
+	<div class="search">
+		<v-container fluid grid-list-md>
+			<v-layout row wrap>
+			<v-flex xs12>
+				<v-textarea id = "searchButton"
+				outline
+				name="input-7-4"
+				label="Query Area"
+				value=""				
+				></v-textarea>
+				<v-btn @click= "valueCallback">Execute
+					
+				</v-btn>
+			</v-flex>
+			</v-layout>
+		</v-container>	
+		<!-- <v-select
 			:items= "items"
 			label= "Standard"
 			@change= "valueCallback"
@@ -21,7 +37,7 @@
 			:items="items"
 			label="Solo field"
 			solo
-		></v-select>
+		></v-select> -->
 	</div>
 </template>
 
@@ -44,9 +60,11 @@ export default class Search extends Vue {
 		//
 	}
 	private async valueCallback() {
-		console.log(this.selection);
+		const textArea = document.getElementById("searchButton") as HTMLInputElement;
+		const input = textArea.value;
+		console.log(input);
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
-		fullURL += encodeURIComponent("SELECT * from BarBeerDrinker.bars");
+		fullURL += encodeURIComponent(input);
 		const queryGet = await axios.get(fullURL);
 		console.log(queryGet);
 	}
