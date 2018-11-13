@@ -25,7 +25,6 @@
 									<td>{{ props.item.day }}</td>
 								</template>
 							</v-data-table>
-							<BarChart/>
 						</v-card-text>
 					</v-card>
 				</v-flex>

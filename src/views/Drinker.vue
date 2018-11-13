@@ -112,7 +112,7 @@ import HorzBarChart from "@/components/HorzBarChart.vue";
 })
 
 export default class Drinker extends Vue {
- 
+
 	private tabs: any = null;
 
 	private drinker: string = "";
