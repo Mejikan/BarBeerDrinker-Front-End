@@ -390,31 +390,22 @@
 
 		private dayNumber(dayNumber: number ): string {
 			let result: string = "";
-			switch ( dayNumber ) {
-				case 1: {
-					result = "Sunday";
-				}
-				case 2: {
-					result = "Monday";
-				}
-				case 3: {
-					result = "Tuesday";
-				}
-				case 4: {
-					result = "Wednesday";
-				}
-				case 5: {
-					result = "Thursday";
-				}
-				case 6: {
-					result = "Friday";
-				}
-				case 7: {
-					result = "Saturday";
-				}
-				default: {
-					result = "Unknown";
-				}
+			if (dayNumber === 1) {
+				result = "Sunday";
+			} else if (dayNumber === 2) {
+				result = "Monday";
+			} else if (dayNumber === 3) {
+				result = "Tuesday";
+			} else if (dayNumber === 4) {
+				result = "Wednesday";
+			} else if (dayNumber === 5) {
+				result = "Thursday";
+			} else if (dayNumber ===  6) {
+				result = "Friday";
+			} else if (dayNumber === 7) {
+				result = "Saturday";
+			} else {
+				result = "Day Readable";
 			}
 			return result;
 		}
@@ -431,7 +422,6 @@
 				const beerCount: number[] = [];
 				for (const row of rows) {
 					barNames.push(row.bar);
-					// might need tweakign
 					beerCount.push(row.count);
 				}
 				this.topSellersChartData = {
@@ -460,7 +450,6 @@
 				const beerCount: number[] = [];
 				for (const row of rows) {
 					drinkerNames.push(row.drinker);
-					// might need tweakign
 					beerCount.push(row.count);
 				}
 				this.topDrinkersChartData = {
@@ -488,10 +477,8 @@
 				const beerCount: number[] = [];
 				let today: string = "";
 				for (const row of rows) {
-					
-					today = this.dayNumber(row.day) as string;
+					today = this.dayNumber(parseInt(row.day, 10)) as string;
 					peakTimes.push(today);
-					// might need tweakign
 					beerCount.push(row.count);
 				}
 				this.highVolumeTimesChartData = {

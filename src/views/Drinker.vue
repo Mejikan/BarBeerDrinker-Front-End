@@ -14,12 +14,12 @@
 								<v-autocomplete
 									v-model="drinker"
 									:items="allDrinkerNames"
-									placeholder="Enter a drinker's name"
+									placeholder="Enter a drinker's name and press enter"
 									persistent-hint
 									append-icon="search"
 									solo
 									@click:append="retrieveDrinkerData"
-									@keyup.enter="retrieveDrinkerData"
+									@keyup.enter="retrieveDrinkerData"									
 								></v-autocomplete>
 							</v-flex>
 						</v-layout>
