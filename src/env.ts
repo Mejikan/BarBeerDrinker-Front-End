@@ -1,11 +1,8 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 export class Env {
-	public static readonly PROJECT_DIR: string = (process.env.PROJECT_DIR || __dirname);
-	public static readonly PORT: number = (process.env.PORT ? parseInt(process.env.PORT, 10) : 8080);
+	public static readonly NODE_ENV: string = (process.env.NODE_ENV || "");
+	public static readonly BASE_URL: string = (process.env.BASE_URL || "");
 	/**
 	 * The FQDN of the web server hosting the site's API.
 	 */
-	public static readonly SITE_API_DOMAIN: string = (process.env.SITE_API_DOMAIN || "http://localhost:8081");
+	public static readonly SITE_API_DOMAIN: string = (process.env.VUE_APP_SITE_API_DOMAIN || "http://localhost:8081");
 }
