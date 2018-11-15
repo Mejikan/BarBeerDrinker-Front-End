@@ -246,7 +246,7 @@ export default class Search extends Vue {
 		this.allowQuery = false;
 
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
-		fullURL += encodeURIComponent(this.query);
+		fullURL += encodeURIComponent(`use BarBeerDrinker;${this.query}`);
 		try {
 			const response = await axios.get(fullURL);
 			const data = response.data as any[];
