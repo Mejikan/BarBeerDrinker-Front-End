@@ -2,10 +2,10 @@
 	<div class="drinker">
 		<v-container fluid>
 			<v-layout row wrap>
-				<v-flex xs12>
-					<v-subheader v-show="currentDrinker.length > 0">
+				<v-flex xs12 lg10 offset-lg1>
+					<!-- <v-subheader v-show="currentDrinker.length > 0">
 						Displaying data for {{ currentDrinker }}
-					</v-subheader>
+					</v-subheader> -->
 					<v-toolbar
 						tabs
 						>
