@@ -3,24 +3,37 @@
 		<v-container fluid>
 			<v-layout row wrap>
 				<v-flex xs12 lg10 offset-lg1>
-					<!-- <v-subheader v-show="currentDrinker.length > 0">
-						Displaying data for {{ currentDrinker }}
-					</v-subheader> -->
 					<v-toolbar
 						tabs
 						>
-						<v-layout justify-center>
-							<v-flex xs12 lg6>
+						<v-layout justify-center row wrap>
+							<v-flex xs12 md8 lg6>
 								<v-autocomplete
 									v-model="drinker"
 									:items="allDrinkerNames"
 									placeholder="Enter a drinker's name and press enter"
-									persistent-hint
-									append-icon="search"
 									solo
-									@click:append="retrieveDrinkerData"
-									@keyup.enter="retrieveDrinkerData"									
+									@keyup.enter="retrieveDrinkerData"					
 								></v-autocomplete>
+							</v-flex>
+							<v-flex xs12 md2 lg1>
+								<v-btn
+									v-show="!retreivingData"
+									large
+									color="primary"
+									:disabled="!allowQuery"
+									@click="retrieveDrinkerData"
+								>
+									<v-icon>
+										search
+									</v-icon>
+								</v-btn>
+								<v-progress-circular
+									v-show="retreivingData"
+									indeterminate
+									color="primary"
+									class="mx-3 mt-2"
+								></v-progress-circular>
 							</v-flex>
 						</v-layout>
 
@@ -120,9 +133,20 @@ export default class Drinker extends Vue {
 	private tabs: any = null;
 
 	private drinker: string = "";
-
-	/** The drinker whose data is currently display. */
-	private currentDrinker: string = "";
+	private lastQuery: string = "";
+	private retreivingData: boolean = false;
+	private get allowQuery(): boolean {
+		if (!this.drinker || this.drinker.trim().length < 1) {
+			return false;
+		}
+		if (this.drinker === this.lastQuery) {
+			return false;
+		}
+		if (this.retreivingData) {
+			return false;
+		}
+		return true;
+	}
 
 	private formValid: boolean = true;
 
@@ -322,11 +346,13 @@ export default class Drinker extends Vue {
 	}
 
 	private async retrieveDrinkerData(): Promise<void> {
+		this.retreivingData = true;
+		this.lastQuery = this.drinker;
 		await Promise.all([this.setTransactions(this.drinker),
 			this.setCommonOrders(this.drinker),
 			this.setSpending(this.drinker),
 		]);
-		this.currentDrinker = this.drinker;
+		this.retreivingData = false;
 	}
 
 	private mounted() {
