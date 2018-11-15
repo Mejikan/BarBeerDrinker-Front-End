@@ -195,6 +195,28 @@ export default class Bar extends Vue {
 		},
 	};
 
+	private dayNumber(dayNumber: number ): string {
+		let result: string = "";
+		if (dayNumber === 1) {
+			result = "Sunday";
+		} else if (dayNumber === 2) {
+			result = "Monday";
+		} else if (dayNumber === 3) {
+			result = "Tuesday";
+		} else if (dayNumber === 4) {
+			result = "Wednesday";
+		} else if (dayNumber === 5) {
+			result = "Thursday";
+		} else if (dayNumber ===  6) {
+			result = "Friday";
+		} else if (dayNumber === 7) {
+			result = "Saturday";
+		} else {
+			result = "Day Readable";
+		}
+		return result;
+	}
+
 	private queryTopSpenders(Bar1: string): string {
 		console.log(Bar1);
 		return `Select drinker, sum(total) as running_total
@@ -237,9 +259,15 @@ export default class Bar extends Vue {
 				LIMIT 10`;
 	}
 
-	private queryTopTimes(Bar3: string): string {
-		return `${Bar3}`;
-	}
+	private queryTopTimes(Bar4: string): string {
+		return `SELECT
+					t.day,
+					sum(t.total) as Revenue
+				FROM BarBeerDrinker.transaction t
+				WHERE t.bar = "${Bar4}"
+				group by t.day
+				order by Revenue desc`;
+					}
 
 	private async setUpTopSpenders(bar: string): Promise<void> {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
@@ -259,7 +287,7 @@ export default class Bar extends Vue {
 				labels: drinkerNames,
 				datasets: [
 					{
-						label: "Bars",
+						label: "This patron's total spending",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
 						data: drinkerSpendingTotal,
 					},
@@ -288,7 +316,7 @@ export default class Bar extends Vue {
 				labels: beerNames,
 				datasets: [
 					{
-						label: "Bars",
+						label: "Number sold of this beer",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
 						data: beerCount,
 					},
@@ -317,7 +345,7 @@ export default class Bar extends Vue {
 				labels: manufacturerNames,
 				datasets: [
 					{
-						label: "Bars",
+						label: "Number of Beers per Manufacturer",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
 						data: manufacturerCount,
 					},
@@ -336,19 +364,19 @@ export default class Bar extends Vue {
 			console.log(response.data);
 
 			const rows: any[] = response.data as any[];
-			const barNames: string[] = [];
-			const barCount: number[] = [];
+			const barDay: string[] = [];
+			const barRevenue: number[] = [];
 			for (const row of rows) {
-				barNames.push(row.bar);
-				barCount.push(row.count);
+				barDay.push(this.dayNumber(row.day));
+				barRevenue.push(row.Revenue);
 			}
-			this.mvManufacturersChartData = {
-				labels: barNames,
+			this.mvTimesChartData = {
+				labels: barDay,
 				datasets: [
 					{
-						label: "Bars",
+						label: "Revenue per day",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
-						data: barCount,
+						data: barRevenue,
 					},
 				],
 			};
@@ -361,7 +389,7 @@ export default class Bar extends Vue {
 	this.setUpTopSpenders(this.bar);
 	this.setUpTopBeers(this.bar);
 	this.setUpTopManufacturers(this.bar);
-	// this.setUpTopTimes(this.bar);
+	this.setUpTopTimes(this.bar);
 	}
 
 	private mounted() {
