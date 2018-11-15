@@ -361,7 +361,7 @@
 				FROM BarBeerDrinker.transaction T
 				where T.trans_id IN (
 					SELECT B.trans_id FROM BarBeerDrinker.billContains B
-					WHERE B.item = '${Beer1}')
+					WHERE B.item = "${Beer1}")
 				group by T.bar
 				order by count(*) desc Limit 10`;
 		}
@@ -372,7 +372,7 @@
 				where T.trans_id IN	(
 					SELECT B.trans_id
 					FROM BarBeerDrinker.billContains B
-					WHERE B.item = '${Beer2}')
+					WHERE B.item = "${Beer2}")
 				group by T.drinker
 				order by count(*) desc limit 10`;
 		}
@@ -383,7 +383,7 @@
 				where T.trans_id IN	(
 					SELECT B.trans_id
 					FROM BarBeerDrinker.billContains B
-					WHERE B.item = '${Beer3}')
+					WHERE B.item = "${Beer3}")
 					group by T.day
 					order by count(*) desc limit 10`;
 		}

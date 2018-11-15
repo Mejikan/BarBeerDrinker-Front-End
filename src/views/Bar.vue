@@ -195,33 +195,55 @@ export default class Bar extends Vue {
 		},
 	};
 
-	private queryTopSellers(Bar1: string): string {
+	private queryTopSpenders(Bar1: string): string {
+		console.log(Bar1);
+		return `Select drinker, sum(total) as running_total
+				FROM BarBeerDrinker.transaction t
+				WHERE t.bar = "${Bar1}"
+				GROUP BY t.drinker
+				order by running_total desc
+				LIMIT 10`;
+	}
+
+	private queryTopBeers(Bar2: string): string {
 		return `SELECT b.item, count(b.item) as count
-			FROM BarBeerDrinker.billContains as b, BarBeerDrinker.items as i
-			WHERE
-				i.item_name = b.item &&
-				i.item_type = "beer" &&
-				b.trans_id in
-					(
-					SELECT t.trans_id
-					FROM BarBeerDrinker.transaction as t
-					WHERE t.bar = "${Bar1}"
-					)
-			group by b.item
-			order by count desc `;
+				FROM BarBeerDrinker.billContains as b, BarBeerDrinker.items as i
+				WHERE
+					i.item_name = b.item &&
+					i.item_type = "beer" &&
+					b.trans_id in
+						(SELECT t.trans_id
+						FROM BarBeerDrinker.transaction as t
+						WHERE t.bar = "${Bar2}")
+				group by b.item
+				order by count desc
+				LIMIT 10`;
 	}
 
-	private queryTopDrinkerOfBeer(Bar2: string): string {
-		return `${Bar2}`;
+	private queryTopManufacturers(Bar3: string): string {
+		return `SELECT i.manufacturer, count(b.item) as count
+				FROM BarBeerDrinker.billContains as b, BarBeerDrinker.items as i
+				WHERE
+					i.item_name = b.item &&
+					i.item_type = "beer" &&
+					b.trans_id in
+						(
+						SELECT t.trans_id
+						FROM BarBeerDrinker.transaction as t
+						WHERE t.bar = "${Bar3}"
+						)
+				group by i.manufacturer
+				order by count desc
+				LIMIT 10`;
 	}
 
-	private queryWhenBeerSellsMost(Bar3: string): string {
+	private queryTopTimes(Bar3: string): string {
 		return `${Bar3}`;
 	}
 
-	private async setUpTopSellers(bar: string): Promise<void> {
+	private async setUpTopSpenders(bar: string): Promise<void> {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
-		fullURL += encodeURIComponent(this.queryTopSellers(this.bar));
+		fullURL += encodeURIComponent(this.queryTopSpenders(this.bar));
 		const response = await axios.get(fullURL);
 		if (response.status === 200) {
 			console.log(response.data);
@@ -233,13 +255,13 @@ export default class Bar extends Vue {
 				barNames.push(row.bar);
 				barCount.push(row.count);
 			}
-			this.topSellersChartData = {
+			this.mvDrinkersChartData = {
 				labels: barNames,
 				datasets: [
 					{
 						label: "Bars",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
-						data: beerCount,
+						data: barCount,
 					},
 				],
 			};
@@ -248,21 +270,105 @@ export default class Bar extends Vue {
 		}
 	}
 
+	private async setUpTopBeers(bar: string): Promise<void> {
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryTopBeers(this.bar));
+		const response = await axios.get(fullURL);
+		if (response.status === 200) {
+			console.log(response.data);
 
-
-
-		private async getBarData(): Promise<void> {
-		this.setUpTopSpenders(this.bar);
-		this.setUpTopBeers(this.bar);
-		this.setUpTopManufacturers(this.bar);
-		this.setUpHighVolumeTimes(this.bar);
+			const rows: any[] = response.data as any[];
+			const barNames: string[] = [];
+			const barCount: number[] = [];
+			for (const row of rows) {
+				barNames.push(row.bar);
+				barCount.push(row.count);
+			}
+			this.mvBeersChartData = {
+				labels: barNames,
+				datasets: [
+					{
+						label: "Bars",
+						backgroundColor: "rgba(0, 127, 255, 0.65)",
+						data: barCount,
+					},
+				],
+			};
+		} else {
+		console.error("Failed to get data");
 		}
+	}
+
+	private async setUpTopManufacturers(bar: string): Promise<void> {
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryTopManufacturers(this.bar));
+		const response = await axios.get(fullURL);
+		if (response.status === 200) {
+			console.log(response.data);
+
+			const rows: any[] = response.data as any[];
+			const barNames: string[] = [];
+			const barCount: number[] = [];
+			for (const row of rows) {
+				barNames.push(row.bar);
+				barCount.push(row.count);
+			}
+			this.mvManufacturersChartData = {
+				labels: barNames,
+				datasets: [
+					{
+						label: "Bars",
+						backgroundColor: "rgba(0, 127, 255, 0.65)",
+						data: barCount,
+					},
+				],
+			};
+		} else {
+		console.error("Failed to get data");
+		}
+	}
+
+	private async setUpTopTimes(bar: string): Promise<void> {
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryTopTimes(this.bar));
+		const response = await axios.get(fullURL);
+		if (response.status === 200) {
+			console.log(response.data);
+
+			const rows: any[] = response.data as any[];
+			const barNames: string[] = [];
+			const barCount: number[] = [];
+			for (const row of rows) {
+				barNames.push(row.bar);
+				barCount.push(row.count);
+			}
+			this.mvManufacturersChartData = {
+				labels: barNames,
+				datasets: [
+					{
+						label: "Bars",
+						backgroundColor: "rgba(0, 127, 255, 0.65)",
+						data: barCount,
+					},
+				],
+			};
+		} else {
+		console.error("Failed to get data");
+		}
+	}
+
+	private async getBarData(): Promise<void> {
+	this.setUpTopSpenders(this.bar);
+	this.setUpTopBeers(this.bar);
+	this.setUpTopManufacturers(this.bar);
+	// this.setUpTopTimes(this.bar);
+	}
 
 	private mounted() {
 		if (this.$route.params.name) {
-			this.beer = this.$route.params.name;
-			if (this.beer.trim().length > 0) {
-				this.getBeerData();
+			this.bar = this.$route.params.name;
+			if (this.bar.trim().length > 0) {
+				this.getBarData();
 			}
 		}
 	}
