@@ -267,6 +267,7 @@ export default class Search extends Vue {
 			} else {
 				// network error
 				this.dbMessage = err.message;
+				this.dataRows = []; // clear data
 				console.error(err);
 			}
 		} finally {
