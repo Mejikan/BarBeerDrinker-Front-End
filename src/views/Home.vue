@@ -9,7 +9,8 @@
 				<v-carousel-item
 					v-for="(item,i) in images"
 					:key="i"
-					:src="item.src"	
+					:src="item.src"
+					interval="8000"
 				></v-carousel-item>
 			</v-carousel>
 		</v-container>
