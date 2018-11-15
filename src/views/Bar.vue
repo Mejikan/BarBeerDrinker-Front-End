@@ -249,19 +249,19 @@ export default class Bar extends Vue {
 			console.log(response.data);
 
 			const rows: any[] = response.data as any[];
-			const barNames: string[] = [];
-			const barCount: number[] = [];
+			const drinkerNames: string[] = [];
+			const drinkerSpendingTotal: number[] = [];
 			for (const row of rows) {
-				barNames.push(row.bar);
-				barCount.push(row.count);
+				drinkerNames.push(row.drinker);
+				drinkerSpendingTotal.push(row.running_total);
 			}
 			this.mvDrinkersChartData = {
-				labels: barNames,
+				labels: drinkerNames,
 				datasets: [
 					{
 						label: "Bars",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
-						data: barCount,
+						data: drinkerSpendingTotal,
 					},
 				],
 			};
@@ -278,19 +278,19 @@ export default class Bar extends Vue {
 			console.log(response.data);
 
 			const rows: any[] = response.data as any[];
-			const barNames: string[] = [];
-			const barCount: number[] = [];
+			const beerNames: string[] = [];
+			const beerCount: number[] = [];
 			for (const row of rows) {
-				barNames.push(row.bar);
-				barCount.push(row.count);
+				beerNames.push(row.item);
+				beerCount.push(row.count);
 			}
 			this.mvBeersChartData = {
-				labels: barNames,
+				labels: beerNames,
 				datasets: [
 					{
 						label: "Bars",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
-						data: barCount,
+						data: beerCount,
 					},
 				],
 			};
@@ -307,19 +307,19 @@ export default class Bar extends Vue {
 			console.log(response.data);
 
 			const rows: any[] = response.data as any[];
-			const barNames: string[] = [];
-			const barCount: number[] = [];
+			const manufacturerNames: string[] = [];
+			const manufacturerCount: number[] = [];
 			for (const row of rows) {
-				barNames.push(row.bar);
-				barCount.push(row.count);
+				manufacturerNames.push(row.manufacturer);
+				manufacturerCount.push(row.count);
 			}
 			this.mvManufacturersChartData = {
-				labels: barNames,
+				labels: manufacturerNames,
 				datasets: [
 					{
 						label: "Bars",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
-						data: barCount,
+						data: manufacturerCount,
 					},
 				],
 			};
