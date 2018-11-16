@@ -17,6 +17,7 @@
 		"ordered-imports": false,
 		"object-literal-sort-keys": false,
 		"no-console": [false, "debug", "info", "error", "log", "warn"],
-		"no-consecutive-blank-lines": false
+		"no-consecutive-blank-lines": false,
+		"variable-name": [false]
 	}
 }
