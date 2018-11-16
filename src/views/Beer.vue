@@ -88,7 +88,7 @@
 	import BarChart from "@/components/BarChart.vue";
 	import { Env } from "@/env";
 	import axios from "axios";
-	import { defaultCoreCipherList } from "constants";
+	// import { defaultCoreCipherList } from "constants";
 
 	@Component({
 		components: {
@@ -97,7 +97,7 @@
 	})
 
 	export default class Beer extends Vue {
-
+		private tabs: any = null;
 		private isEditing: boolean = false;
 		private beer: any = null;
 		private allBeers: string[] = ["077XX",

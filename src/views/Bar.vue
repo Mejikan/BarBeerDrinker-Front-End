@@ -42,7 +42,7 @@
 				:key="4"
 				@change="getBarData"
 			>
-                	High Volume Times
+                	High Volume Days
             </v-tab>
         </v-tabs>
     </v-toolbar>
@@ -116,6 +116,7 @@ import allbars from "@/sql/allbars.json";
 })
 
 export default class Bar extends Vue {
+	private tabs: any = null;
 
 	private allBarNames: string[] = allbars.name;
 	private bar: any = null;

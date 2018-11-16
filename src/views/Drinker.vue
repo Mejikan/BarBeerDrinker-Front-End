@@ -13,7 +13,8 @@
 									:items="allDrinkerNames"
 									placeholder="Enter a drinker's name and press enter"
 									solo
-									@keyup.enter="retrieveDrinkerData"					
+									@keyup.enter="retrieveDrinkerData"
+									@change="retrieveDrinkerData"					
 								></v-autocomplete>
 							</v-flex>
 							<v-flex xs12 md2 lg1>
