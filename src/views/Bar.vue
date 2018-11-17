@@ -307,7 +307,13 @@ export default class Bar extends Vue {
 					}
 
 	private queryTopTimes2(Bar5: string): string {
-		return `${Bar5}`;
+		return `SELECT
+					hour(time(t.date)) as hour,
+					sum(t.total) as Revenue
+				FROM BarBeerDrinker.transactions as t
+				WHERE t.bar = "${Bar5}"
+				GROUP BY hour
+				ORDER BY Revenue desc`;
 				}
 
 	private async setUpTopSpenders(bar: string): Promise<void> {
@@ -428,23 +434,24 @@ export default class Bar extends Vue {
 
 	private async setUpTopTimes2(bar: string): Promise<void> {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
-		fullURL += encodeURIComponent(this.queryTopTimes(this.bar));
+		console.log(this.queryTopTimes2(this.bar));
+		fullURL += encodeURIComponent(this.queryTopTimes2(this.bar));
 		const response = await axios.get(fullURL);
 		if (response.status === 200) {
 			console.log(response.data);
 
 			const rows: any[] = response.data as any[];
-			const barDay: string[] = [];
+			const barHour: string[] = [];
 			const barRevenue: number[] = [];
 			for (const row of rows) {
-				barDay.push(this.dayNumber(row.day));
+				barHour.push(row.hour);
 				barRevenue.push(row.Revenue);
 			}
-			this.mvTimesChartData = {
-				labels: barDay,
+			this.mvTimesChartData2 = {
+				labels: barHour,
 				datasets: [
 					{
-						label: "Revenue per day",
+						label: "Revenue per specific hour (24 hour time)",
 						backgroundColor: "rgba(0, 127, 255, 0.65)",
 						data: barRevenue,
 					},
