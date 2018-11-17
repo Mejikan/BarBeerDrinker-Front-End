@@ -125,7 +125,6 @@ import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 import { Env } from "@/env";
 import BarChart from "@/components/BarChart.vue";
-import allbars from "@/sql/allbars.json";
 
 @Component({
 	components: {
@@ -136,7 +135,7 @@ import allbars from "@/sql/allbars.json";
 export default class Bar extends Vue {
 	private tabs: any = null;
 
-	private allBarNames: string[] = allbars.name;
+	private allBarNames: string[] = [];
 	private bar: any = null;
 	private mvDrinkersChartData: any = {};
 
@@ -258,7 +257,7 @@ export default class Bar extends Vue {
 	private queryTopSpenders(Bar1: string): string {
 		console.log(Bar1);
 		return `Select drinker, sum(total) as running_total
-				FROM BarBeerDrinker.transaction t
+				FROM BarBeerDrinker.transactions t
 				WHERE t.bar = "${Bar1}"
 				GROUP BY t.drinker
 				order by running_total desc
@@ -273,7 +272,7 @@ export default class Bar extends Vue {
 					i.item_type = "beer" &&
 					b.trans_id in
 						(SELECT t.trans_id
-						FROM BarBeerDrinker.transaction as t
+						FROM BarBeerDrinker.transactions as t
 						WHERE t.bar = "${Bar2}")
 				group by b.item
 				order by count desc
@@ -289,7 +288,7 @@ export default class Bar extends Vue {
 					b.trans_id in
 						(
 						SELECT t.trans_id
-						FROM BarBeerDrinker.transaction as t
+						FROM BarBeerDrinker.transactions as t
 						WHERE t.bar = "${Bar3}"
 						)
 				group by i.manufacturer
@@ -301,7 +300,7 @@ export default class Bar extends Vue {
 		return `SELECT
 					t.day,
 					sum(t.total) as Revenue
-				FROM BarBeerDrinker.transaction t
+				FROM BarBeerDrinker.transactions t
 				WHERE t.bar = "${Bar4}"
 				group by t.day
 				order by Revenue desc`;
@@ -457,14 +456,30 @@ export default class Bar extends Vue {
 	}
 
 	private async getBarData(): Promise<void> {
-	this.setUpTopSpenders(this.bar);
-	this.setUpTopBeers(this.bar);
-	this.setUpTopManufacturers(this.bar);
-	this.setUpTopTimes(this.bar);
-	this.setUpTopTimes2(this.bar);
+		this.setUpTopSpenders(this.bar);
+		this.setUpTopBeers(this.bar);
+		this.setUpTopManufacturers(this.bar);
+		this.setUpTopTimes(this.bar);
+		this.setUpTopTimes2(this.bar);
 	}
 
-	private mounted() {
+	private async retrieveAllBarNames() {
+		const q = `SELECT name FROM BarBeerDrinker.bars;`;
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(q);
+		const response = await axios.get(fullURL);
+		const results: any[] = [];
+		if (response.status === 200) {
+			const rows: any[] = response.data as any[];
+			for (const row of rows) {
+				results.push(row.name);
+			}
+			this.allBarNames = results;
+		}
+	}
+
+	private async mounted() {
+		await this.retrieveAllBarNames();
 		if (this.$route.params.name) {
 			this.bar = this.$route.params.name;
 			if (this.bar.trim().length > 0) {

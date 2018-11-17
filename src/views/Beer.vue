@@ -100,204 +100,7 @@
 		private tabs: any = null;
 		private isEditing: boolean = false;
 		private beer: any = null;
-		private allBeers: string[] = ["077XX",
-			"1492",
-			"312 Urban Pale Ale",
-			"312 Urban Wheat Ale",
-			"543 Skull Creek Fresh Hopped Pale Ale",
-			"Akari Shogun American Wheat Ale",
-			"All American Blonde Ale",
-			"American Red Porter",
-			"Angry Orchard Crisp Apple",
-			"Arjuna",
-			"Arkansas Red",
-			"Awry Rye Pale Ale",
-			"Back East Ale",
-			"Back in Black",
-			"Barney Flats Oatmeal Stout",
-			"Barrio Blanco",
-			"Batch 69 IPA",
-			"Beach Patrol",
-			"Beasts A'Burnin'",
-			"Beaver Logger",
-			"Behemoth",
-			"Bent Paddle Black Ale",
-			"Big Elm IPA",
-			"Big Star White IPA",
-			"Bikini Beer",
-			"Black Exodus",
-			"Blonde Czich",
-			"Blood Orange Honey",
-			"Boy King",
-			"Bozone Hefe Weizen",
-			"Bring Back the Beach Blonde Ale",
-			"Brotherhood Steam",
-			"Brush Creek Blonde",
-			"Burning Bush Smoked IPA",
-			"Caldera IPA",
-			"Category 3 IPA",
-			"Cherny Bock",
-			"Chugach Session Ale",
-			"Churchkey Pilsner Style Beer",
-			"Citra Ass Down",
-			"Clean Shave IPA",
-			"Cone Crusher",
-			"Contemplation",
-			"Copperhead Amber",
-			"Coq D'Or",
-			"Coq de la Marche",
-			"Core Oatmeal Stout",
-			"Country Boy IPA",
-			"Cut Throat Pale Ale",
-			"Dead Armadillo Amber Ale",
-			"Deadicated Amber",
-			"Devils Tramping Ground Tripel",
-			"Divided Sky",
-			"Dolores River ESB",
-			"Double Brown Stout",
-			"Dry Dock Amber Ale",
-			"Dry Hard Apple Cider",
-			"Dubbelicious",
-			"Dundee Summer Wheat Beer",
-			"East India Pale Ale",
-			"Easy Livin' Summer Ale",
-			"El Hefe Speaks",
-			"Fall Hornin'",
-			"Farmer Ted's Farmhouse Cream Ale",
-			"Farmer Wirtz India Pale Ale",
-			"Fearless Scottish Ale",
-			"Field 41 Pale Ale",
-			"Firewater India Pale Ale",
-			"First Press",
-			"Fisherman's Brew",
-			"Flesh Gourd'n",
-			"FMB 101",
-			"Fort Pitt Ale",
-			"Four String Vanilla Porter",
-			"Freeride APA",
-			"General George Patton Pilsner",
-			"Ginja Ninja",
-			"Good People Pale Ale",
-			"Gossamer Golden Ale",
-			"Great Crescent Belgian Style Wit",
-			"Great Crescent Blonde Ale",
-			"Great Crescent IPA",
-			"Green Bullet Organic India Pale Ale",
-			"Green Collar",
-			"Greenbelt Farmhouse Ale",
-			"Gutch English Style Mild Ale",
-			"Gyptoberfest",
-			"Hardcore Chimera",
-			"Harvest Ale",
-			"Heavy Lifting",
-			"Heinnieweisse Weissebier",
-			"Here Gose Nothin'",
-			"Hop Stalker Fresh Hop IPA",
-			"HopArt",
-			"Hopkick Dropkick",
-			"Hopportunity Knocks IPA",
-			"Horny Toad Cerveza",
-			"Incredible Pedal IPA",
-			"Insert Hop Reference",
-			"Jade",
-			"Jalapeno Pale Ale",
-			"Kaleidoscope Collaboration 2012",
-			"Kilt Dropper Scotch Ale",
-			"Little Boss",
-			"Little Sister India Style Session Ale",
-			"Live Local Golden Ale",
-			"London Balling",
-			"Lost Sailor IPA",
-			"Lucky Buck",
-			"Maduro Brown Ale",
-			"MCA",
-			"Mirror Pond Pale Ale",
-			"Misty Mountain IPA",
-			"Moe Lasses'",
-			"Moose Drool Brown Ale",
-			"Morning Wood",
-			"Mountain Fairy Raspberry Wheat",
-			"Mountain Livin' Pale Ale",
-			"Naked Pig Pale Ale",
-			"Newport Storm IPA",
-			"Noche Dulce",
-			"Norm's Raggedy Ass IPA",
-			"North French",
-			"Oak Cliff Coffee Ale",
-			"Oatmeal PSA",
-			"Oberon",
-			"OktoberFiesta",
-			"Old Detroit",
-			"Orange Grove Wheat Ale",
-			"Passion Fruit Prussia",
-			"Pepper in the Rye",
-			"Perzik Saison",
-			"Pilot Rock Porter",
-			"Plow Horse Belgian Style Imperial Stout",
-			"Point the Way IPA",
-			"Polar Pale Ale",
-			"Pothole Stout",
-			"Powder Hound Winter Ale",
-			"Psychopomp",
-			"Pumpkin Beast",
-			"Quick WIT",
-			"Quick Wit Belgianesque Ale",
-			"Raincloud Robust Porter",
-			"Rhode Island Blueberry",
-			"Rod Bender Red",
-			"Roller Dam Red Ale",
-			"Rules are Rules",
-			"Rye Pils Session Lager",
-			"Rye Porter",
-			"Saddle Bronc Brown Ale",
-			"Samuel Adams Summer Ale",
-			"Sankaty Light Lager",
-			"Santa's Secret",
-			"Saucy Intruder",
-			"Sawtooth Ale",
-			"Seiche Scottish Ale",
-			"Sex and Candy",
-			"Shark Tracker Light lager",
-			"Single Engine Red",
-			"Sky Blue Golden Ale",
-			"Sky High Rye",
-			"Solitude",
-			"South Ridge Amber Ale",
-			"Southern Drawl Pale Lager",
-			"Star Runner",
-			"Stone's Throw IPA",
-			"Strawberry Blonde",
-			"Sudice American Stout",
-			"Summer Honey",
-			"Suncaster Summer Wheat",
-			"Tart Side of the Moon",
-			"Tender Loving Empire NWPA",
-			"Terrace Hill Double IPA",
-			"The 26th",
-			"The Citizen",
-			"The Gadget",
-			"The Grand Army",
-			"The Lawn Ranger",
-			"Thrasher Session India Pale Ale",
-			"Toasted Lager",
-			"Tree Bucket",
-			"Trigger Blonde Ale",
-			"Twisted Helles Summer Lager",
-			"Underachiever",
-			"Underdog Atlantic Lager",
-			"Vanilla Java Porter",
-			"Verdun",
-			"Vertex IPA",
-			"Vivant Tripel",
-			"Wandering Pelican",
-			"Watermelon Ale",
-			"West Portal Colorado Common Summer Ale",
-			"White Zombie Ale",
-			"Whitsun",
-			"Wolfman's Berliner",
-			"Wrath of Pele",
-			"Yo Soy Un Berliner",
-		];
+		private allBeers: string[] = [];
 
 		private topSellersChartData: any = {};
 
@@ -358,7 +161,7 @@
 
 		private queryTopSellers(Beer1: string): string {
 			return `SELECT T.bar, count(*) as count
-				FROM BarBeerDrinker.transaction T
+				FROM BarBeerDrinker.transactions T
 				where T.trans_id IN (
 					SELECT B.trans_id FROM BarBeerDrinker.billContains B
 					WHERE B.item = "${Beer1}")
@@ -368,7 +171,7 @@
 
 		private queryTopDrinkerOfBeer(Beer2: string): string {
 			return `SELECT T.drinker, count(*) as count
-				FROM BarBeerDrinker.transaction T
+				FROM BarBeerDrinker.transactions T
 				where T.trans_id IN	(
 					SELECT B.trans_id
 					FROM BarBeerDrinker.billContains B
@@ -379,7 +182,7 @@
 
 		private queryWhenBeerSellsMost(Beer3: string): string {
 			return `SELECT T.day, count(*) as count
-				FROM BarBeerDrinker.transaction T
+				FROM BarBeerDrinker.transactions T
 				where T.trans_id IN	(
 					SELECT B.trans_id
 					FROM BarBeerDrinker.billContains B
@@ -496,18 +299,34 @@
 			}		}
 
 		private async getBeerData(): Promise<void> {
-		this.setUpTopSellers(this.beer);
-		this.setUpTopDrinkers(this.beer);
-		this.setUpHighVolumeTimes(this.beer);
+			this.setUpTopSellers(this.beer);
+			this.setUpTopDrinkers(this.beer);
+			this.setUpHighVolumeTimes(this.beer);
 		}
 
-		private mounted() {
-		if (this.$route.params.name) {
-			this.beer = this.$route.params.name;
-			if (this.beer.trim().length > 0) {
-				this.getBeerData();
+		private async retrieveAllBeerNames() {
+			const q = `SELECT item_name AS name FROM BarBeerDrinker.items WHERE item_type='beer';`;
+			let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+			fullURL += encodeURIComponent(q);
+			const response = await axios.get(fullURL);
+			const results: any[] = [];
+			if (response.status === 200) {
+				const rows: any[] = response.data as any[];
+				for (const row of rows) {
+					results.push(row.name);
+				}
+				this.allBeers = results;
 			}
 		}
+
+		private async mounted() {
+			await this.retrieveAllBeerNames();
+			if (this.$route.params.name) {
+				this.beer = this.$route.params.name;
+				if (this.beer.trim().length > 0) {
+					this.getBeerData();
+				}
+			}
 	}
 }
 </script>

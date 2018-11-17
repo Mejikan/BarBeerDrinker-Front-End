@@ -18,8 +18,11 @@ export default new Router({
 			component: Home,
 		},
 		{
+			path: "/bar/:name",
+			component: Bar,
+		},
+		{
 			path: "/bar",
-			name: "bar",
 			component: Bar,
 		},
 		{
@@ -29,6 +32,10 @@ export default new Router({
 		{
 			path: "/drinker",
 			component: Drinker,
+		},
+		{
+			path: "/beer:name",
+			component: Beer,
 		},
 		{
 			path: "/beer",

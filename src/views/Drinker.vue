@@ -44,6 +44,9 @@
 							centered
 							color="transparent"
 							>
+							<v-tab :key="0">
+								Details
+							</v-tab>
 							<v-tab :key="1">
 								Transactions
 							</v-tab>
@@ -57,6 +60,59 @@
 					</v-toolbar>
 
 					<v-tabs-items v-model="tabs">
+						<v-tab-item :key="0">
+							<v-card v-show="details.name">
+								<v-card-text>
+									<v-list two-line>
+										<v-list-tile-content>
+											<v-list-tile-sub-title>Name</v-list-tile-sub-title>
+											<v-list-tile-title>{{ details.name }}</v-list-tile-title>
+										</v-list-tile-content>
+										<v-list-tile-content>
+											<v-list-tile-sub-title>Address</v-list-tile-sub-title>
+											<v-list-tile-title>{{ details.addr }}</v-list-tile-title>
+										</v-list-tile-content>
+										<v-list-tile-content>
+											<v-list-tile-sub-title>City</v-list-tile-sub-title>
+											<v-list-tile-title>{{ details.city }}</v-list-tile-title>
+										</v-list-tile-content>
+										<v-list-tile-content>
+											<v-list-tile-sub-title>State</v-list-tile-sub-title>
+											<v-list-tile-title>{{ details.state }}</v-list-tile-title>
+										</v-list-tile-content>
+										<v-list-tile-content>
+											<v-list-tile-sub-title>Phone</v-list-tile-sub-title>
+											<v-list-tile-title>{{ details.phone }}</v-list-tile-title>
+										</v-list-tile-content>
+										<v-list-tile-content>
+											<v-list-tile-sub-title>Frequents</v-list-tile-sub-title>
+											<ul>
+												<li
+													v-for="f in details.frequents"
+													:key="f"
+												>
+													<router-link :to="`/bar/${encodeURIComponent(f)}`"
+													>{{f}}</router-link>
+												</li>
+											</ul>
+										</v-list-tile-content>
+										<v-list-tile-content>
+											<v-list-tile-sub-title>Likes</v-list-tile-sub-title>
+											<ul>
+												<li
+													v-for="l in details.likes"
+													:key="l"
+												>
+													{{l}}
+													<!-- <router-link :to="`/beer/${encodeURIComponent(l)}`"
+													>{{l}}</router-link> -->
+												</li>
+											</ul>
+										</v-list-tile-content>
+									</v-list>
+								</v-card-text>
+							</v-card>
+						</v-tab-item>
 						<v-tab-item :key="1">
 							<v-card>
 								<v-card-title>
@@ -114,6 +170,12 @@
 												></v-text-field>
 												<v-date-picker v-model="spendBeginDate" @input="onBeginDatePicked"></v-date-picker>
 											</v-menu>
+											<v-tooltip top>
+												<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+												<span>
+													All transactions before this date will be excluded.
+												</span>
+											</v-tooltip>
 										</v-flex>
 										<v-flex>
 											<v-menu
@@ -132,6 +194,12 @@
 												></v-text-field>
 												<v-date-picker v-model="spendEndDate" @input="onEndDatePicked"></v-date-picker>
 											</v-menu>
+											<v-tooltip top>
+												<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+												<span>
+													All transactions after this date will be excluded.
+												</span>
+											</v-tooltip>
 										</v-flex>
 									</v-layout>
 									<HorzBarChart
@@ -156,7 +224,6 @@ import axios from "axios";
 import { Env } from "@/env";
 import BarChart from "@/components/BarChart.vue";
 import HorzBarChart from "@/components/HorzBarChart.vue";
-import * as drinkerNames from "@/sql/drinkers.json";
 
 @Component({
 	components: {
@@ -166,11 +233,12 @@ import * as drinkerNames from "@/sql/drinkers.json";
 })
 
 export default class Drinker extends Vue {
-	private allDrinkerNames: string[] = drinkerNames.drinkers;
+	private allDrinkerNames: string[] = [];
 
 	private tabs: any = null;
 
 	private drinker: string = "";
+	private details: any = {};
 	private lastQuery: string = "";
 	private retreivingData: boolean = false;
 	private get allowQuery(): boolean {
@@ -258,6 +326,21 @@ export default class Drinker extends Vue {
 		this.spendEndDate_ = new Date(val);
 	}
 
+	private queryDrinker(drinker: string) {
+		return `SELECT * FROM BarBeerDrinker.drinkers d
+			WHERE d.name = '${drinker}';`;
+	}
+
+	private queryFrequents(drinker: string) {
+		return `SELECT DISTINCT bar FROM BarBeerDrinker.frequents f
+			WHERE f.drinker = '${drinker}';`;
+	}
+
+	private queryLikes(drinker: string) {
+		return `SELECT DISTINCT item FROM BarBeerDrinker.likes l
+			WHERE l.drinker = '${drinker}';`;
+	}
+
 	/**
 	 * Show all drinker's transactions ordered by time and grouped by different bars
 	 */
@@ -296,6 +379,49 @@ export default class Drinker extends Vue {
 					FROM BarBeerDrinker.transactions t
 					WHERE t.drinker = '${drinker}'
 					GROUP BY t.bar;`;
+		}
+	}
+
+	private async setDrinkerDetails(drinker: string): Promise<void> {
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryFrequents(drinker));
+		let response = await axios.get(fullURL);
+
+		const frequents: string[] = [];
+		if (response.status === 200) {
+			const rows: any[] = response.data as any[];
+			for (const row of rows) {
+				frequents.push(row.bar);
+			}
+		}
+
+		fullURL = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryLikes(drinker));
+		response = await axios.get(fullURL);
+
+		const likes: string[] = [];
+		if (response.status === 200) {
+			const rows: any[] = response.data as any[];
+			for (const row of rows) {
+				likes.push(row.item);
+			}
+		}
+
+		fullURL = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryDrinker(drinker));
+		response = await axios.get(fullURL);
+
+		if (response.status === 200) {
+			const rows: any[] = response.data as any[];
+			this.details = {
+				name: rows[0].name,
+				city: rows[0].city,
+				state: rows[0].state,
+				addr: rows[0].addr,
+				phone: rows[0].phone,
+				frequents,
+				likes,
+			};
 		}
 	}
 
@@ -436,14 +562,32 @@ export default class Drinker extends Vue {
 	private async retrieveDrinkerData(): Promise<void> {
 		this.retreivingData = true;
 		this.lastQuery = this.drinker;
-		await Promise.all([this.setTransactions(this.drinker),
+		await Promise.all([
+			this.setDrinkerDetails(this.drinker),
+			this.setTransactions(this.drinker),
 			this.setCommonOrders(this.drinker),
 			this.setSpending(this.drinker),
 		]);
 		this.retreivingData = false;
 	}
 
-	private mounted() {
+	private async retrieveAllDrinkerNames() {
+		const q = `SELECT name FROM BarBeerDrinker.drinkers;`;
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(q);
+		const response = await axios.get(fullURL);
+		const results: any[] = [];
+		if (response.status === 200) {
+			const rows: any[] = response.data as any[];
+			for (const row of rows) {
+				results.push(row.name);
+			}
+			this.allDrinkerNames = results;
+		}
+	}
+
+	private async mounted() {
+		await this.retrieveAllDrinkerNames();
 		if (this.$route.params.name) {
 			this.drinker = this.$route.params.name;
 			if (this.drinker.trim().length > 0) {

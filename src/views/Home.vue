@@ -11,7 +11,17 @@
 					:key="i"
 					:src="item.src"
 					interval="8000"
-				></v-carousel-item>
+				>
+					<v-container fluid fill-height>
+						<v-layout justify-center align-center>
+							<div
+								class="text-xs-center pa-3 white--text display-4 font-weight-bold title-font"
+							>
+								{{ greetings[i] }}
+							</div>
+						</v-layout>
+					</v-container>
+				</v-carousel-item>
 			</v-carousel>
 		</v-container>
 	</div>
@@ -33,5 +43,20 @@ export default class Home extends Vue {
 		{ src: require("@/assets/stock/pexels-photo-1267359.jpeg") },
 		{ src: require("@/assets/stock/pexels-photo-1283219.jpeg") },
 	];
+
+	private greetings: string[] = [
+		"SATISFYING SERVICE",
+		"EXCITING EXPERIENCES",
+		"FASCINATING FOODS",
+		"COMFORTING DRINKS",
+		"WELL-AGED INVENTORY",
+		"UNRIVALED SELECTION",
+	];
 }
 </script>
+
+<style lang="scss" scoped>
+.title-font {
+	background-color: rgba(128, 128, 128, 0.5)
+}
+</style>
