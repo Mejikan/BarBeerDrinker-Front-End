@@ -22,6 +22,13 @@
 					<v-card>
 						<v-card-title primary-title class="title">
 							MODIFY DATABASE
+							<v-tooltip top>
+								<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+								<span>
+									Select an operation to modify the database (INSERT, UPDATE, DELETE) and a table to
+									perform the operation on. Press the COMMIT button below to perform the operation.
+								</span>
+							</v-tooltip>
 						</v-card-title>
 						<v-card-text>
 							<Modify/>

@@ -4,16 +4,36 @@
 			<v-layout row wrap>
 				<v-flex xs12 lg4 class="px-2 pb-2">
 					<v-card>
+						<v-dialog v-model="showER">
+							<v-card>
+								<v-card-title>
+									<span class="headline">ER DIAGRAM</span>
+									<v-spacer></v-spacer>
+									<v-btn @click="showER = !showER">
+										<v-icon>close</v-icon>
+										Close
+									</v-btn>
+								</v-card-title>
+								<v-card-text>
+									<v-img
+										contain
+										:src="require('@/assets/er_diagram.png')"
+										max-width="76vw"
+										max-height="76vh"
+									></v-img>
+								</v-card-text>
+							</v-card>
+						</v-dialog>
 						<v-card-title class="title">
 							BarBeerDrinker Tables
 							<v-spacer></v-spacer>
-							<v-tooltip bottom>
+							<v-tooltip top>
 								<v-btn
 									fab
 									small
 									slot="activator"
 									class="info ma-0"
-									@click="showER"
+									@click="showER = !showER"
 								>
 									<v-icon>launch</v-icon>
 								</v-btn>
@@ -21,6 +41,11 @@
 							</v-tooltip>
 						</v-card-title>
 						<v-card-text>
+							<p>
+								This is the schema for our database. The table names are listed below.
+								Expanding each table name will show the headers of those tables and their
+								respective types. The name of the databse is "BarBeerDrinker".
+							</p>
 							<v-treeview
 								:items="schema"
 								transition
@@ -30,9 +55,31 @@
 					</v-card>
 				</v-flex>
 				<v-flex xs12 lg8>
+					<v-expansion-panel>
+						<v-expansion-panel-content>
+							<v-subheader slot="header">
+								Verification Queries
+								<v-tooltip top>
+									<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+									<span>(Expand to show more) Selecting a verification query will insert the query below.</span>
+								</v-tooltip>
+							</v-subheader>
+							<div class="text-xs-center">
+								<v-btn outline @click="verifyQuery1">one</v-btn>
+								<v-btn outline @click="verifyQuery2">two</v-btn>
+								<v-btn outline @click="verifyQuery3">three</v-btn>
+							</div>
+						</v-expansion-panel-content>
+					</v-expansion-panel>
 					<v-card>
 						<v-card-text>
-							<v-subheader>Query Input</v-subheader>
+							<v-subheader>
+								Query Input
+								<v-tooltip top>
+									<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+									<span>Input any valid SQL query in the box below. Then press the EXECUTE button.</span>
+								</v-tooltip>
+							</v-subheader>
 							<v-textarea 
 								v-model="query"
 								auto-grow
@@ -41,7 +88,13 @@
 								append-icon="clear"
 								@click:append="clearQueryInput"
 							></v-textarea>
-							<v-subheader>Query Response</v-subheader>
+							<v-subheader>
+								Query Response
+								<v-tooltip top>
+									<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+									<span>(Readonly) The response returned from the database for a given query.</span>
+								</v-tooltip>
+							</v-subheader>
 							<v-textarea 
 								v-model="dbMessage"
 								auto-grow
@@ -186,6 +239,8 @@ export default class Search extends Vue {
 	];
 	private dataRows: any[] = [];
 
+	private showER: boolean = false;
+
 	private async valueCallback() {
 		if (!this.query || this.query.trim().length < 1) {
 			return;
@@ -226,11 +281,6 @@ export default class Search extends Vue {
 		this.query = "";
 	}
 
-	private showER() {
-		const baseURL = process.env.BASE_URL;
-		window.open(`${baseURL}/er_diagram.pdf`);
-	}
-
 	private exportCSV() {
 		const data = this.dataRows;
 		const headers = Search.resolveHeaders(data);
@@ -258,6 +308,33 @@ export default class Search extends Vue {
 		document.body.appendChild(anchor);
 		anchor.click();
 		anchor.remove();
+	}
+
+	private async verifyQuery1() {
+		// Detecting transactions after hours
+		this.query = `SELECT t.trans_id
+			FROM BarBeerDrinker.transactions t
+			WHERE EXISTS
+			(SELECT b.name
+			FROM BarBeerDrinker.bars b
+			WHERE b.name = t.bar & t.time < b.opens & t.time > b.closes);`;
+	}
+
+	private async verifyQuery2() {
+		// Detecting drinkers frequenting out of state
+		this.query = `SELECT f.drinker
+			FROM BarBeerDrinker.frequents f, BarBeerDrinker.bars b, BarBeerDrinker.drinkers d
+			WHERE f.drinker = d.name & f.bar = b.name & d.state != b.state;`;
+	}
+
+	private async verifyQuery3() {
+		// Detecting transactions after hours
+		this.query = `SELECT t.trans_id
+			FROM BarBeerDrinker.transactions t
+			WHERE EXISTS
+			(SELECT b.name
+			FROM BarBeerDrinker.bars b
+			WHERE b.name = t.bar & t.time < b.opens & t.time > b.closes)`;
 	}
 }
 </script>

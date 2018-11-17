@@ -70,8 +70,7 @@
 									>
 										<template slot="items" slot-scope="props">
 											<td>{{ props.item.bar }}</td>
-											<td>{{ props.item.day }}</td>
-											<td>{{ props.item.time }}</td>
+											<td>{{ props.item.date.toLocaleTimeString() }}</td>
 											<td>{{ props.item.trans_id }}</td>
 											<td>${{ props.item.total.toFixed(2) }}</td>
 											<td>${{ props.item.tip.toFixed(2) }}</td>
@@ -97,6 +96,44 @@
 								<v-card-title>
 								</v-card-title>
 								<v-card-text>
+									<v-layout row justify-space-between>
+										<v-flex>
+											<v-menu
+												:close-on-content-click="false"
+												v-model="showBeginDatePicker"
+												lazy
+												transition="scale-transition"
+												offset-y
+												min-width="290px"
+											>
+												<v-text-field
+													slot="activator"
+													v-model="spendBeginDate"
+													label="Start Date"
+													readonly
+												></v-text-field>
+												<v-date-picker v-model="spendBeginDate" @input="onBeginDatePicked"></v-date-picker>
+											</v-menu>
+										</v-flex>
+										<v-flex>
+											<v-menu
+												:close-on-content-click="false"
+												v-model="showEndDatePicker"
+												lazy
+												transition="scale-transition"
+												offset-y
+												min-width="290px"
+											>
+												<v-text-field
+													slot="activator"
+													v-model="spendEndDate"
+													label="End Date"
+													readonly
+												></v-text-field>
+												<v-date-picker v-model="spendEndDate" @input="onEndDatePicked"></v-date-picker>
+											</v-menu>
+										</v-flex>
+									</v-layout>
 									<HorzBarChart
 										:chartData="spendingChartData"
 										:options="spendingChartOptions"
@@ -152,13 +189,8 @@ export default class Drinker extends Vue {
 	private formValid: boolean = true;
 
 	private tableHeaders: any[] = [
-		{
-			text: "Bar",
-			align: "left",
-			value: "bar",
-		},
-		{ text: "Day", value: "day" },
-		{ text: "Time", value: "time" },
+		{ text: "Bar", value: "bar" },
+		{ text: "Time", value: "date" },
 		{ text: "Transaction ID", value: "trans_id" },
 		{ text: "Total", value: "total" },
 		{ text: "Tip", value: "tip" },
@@ -185,6 +217,7 @@ export default class Drinker extends Vue {
 			},
 		};
 
+	private spendingData: any = [];
 	private spendingChartData: any = {};
 
 	private spendingChartOptions: any = {
@@ -206,13 +239,32 @@ export default class Drinker extends Vue {
 			},
 		};
 
+	private spendBeginDate_: Date = new Date(2014, 0, 1);
+	private spendEndDate_: Date = new Date();
+	private showBeginDatePicker: boolean = false;
+	private showEndDatePicker: boolean = false;
+
+	private get spendBeginDate(): string {
+		return this.spendBeginDate_.toISOString().substring(0, 10);
+	}
+	private set spendBeginDate(val: string) {
+		this.spendBeginDate_ = new Date(val);
+	}
+
+	private get spendEndDate(): string {
+		return this.spendEndDate_.toISOString().substring(0, 10);
+	}
+	private set spendEndDate(val: string) {
+		this.spendEndDate_ = new Date(val);
+	}
+
 	/**
 	 * Show all drinker's transactions ordered by time and grouped by different bars
 	 */
 	private queryTrans(drinker: string): string {
-		return `SELECT * FROM BarBeerDrinker.transaction t
+		return `SELECT * FROM BarBeerDrinker.transactions t
 				WHERE t.drinker = '${drinker}'
-				ORDER BY t.bar, t.time;`;
+				ORDER BY t.bar, t.date;`;
 	}
 
 	/**
@@ -223,7 +275,7 @@ export default class Drinker extends Vue {
 				(SELECT bc.item, COUNT(*) as amount
 				FROM BarBeerDrinker.billContains bc
 				WHERE bc.trans_id IN
-				(SELECT t.trans_id FROM BarBeerDrinker.transaction t
+				(SELECT t.trans_id FROM BarBeerDrinker.transactions t
 				WHERE t.drinker = '${drinker}')
 				GROUP BY bc.item
 				ORDER BY amount DESC) i1
@@ -235,13 +287,13 @@ export default class Drinker extends Vue {
 	 */
 	private querySpending(drinker: string, day?: number): string {
 		if (day) {
-			return `SELECT t.bar, SUM(t.tip) as sum_tip, SUM(t.total) as sum_total
-					FROM BarBeerDrinker.transaction t
+			return `SELECT t.bar, t.date, SUM(t.tip) as sum_tip, SUM(t.total) as sum_total
+					FROM BarBeerDrinker.transactions t
 					WHERE t.drinker = '${drinker}' AND t.day = ${day}
 					GROUP BY t.bar;`;
 		} else {
-			return `SELECT t.bar, SUM(t.tip) as sum_tip, SUM(t.total) as sum_total
-					FROM BarBeerDrinker.transaction t
+			return `SELECT t.bar, t.date, SUM(t.tip) as sum_tip, SUM(t.total) as sum_total
+					FROM BarBeerDrinker.transactions t
 					WHERE t.drinker = '${drinker}'
 					GROUP BY t.bar;`;
 		}
@@ -258,14 +310,32 @@ export default class Drinker extends Vue {
 				const result = {
 					value: false,
 					trans_id: parseInt(row.trans_id, 10),
+					date: new Date(row.date),
 					day: parseInt(row.day, 10),
-					time: row.time,
 					bar: row.bar,
 					drinker: row.drinker,
 					tip: parseFloat(row.tip),
 					total: parseFloat(row.total),
 				};
-				results.push(result);
+				// find sorted position
+				if (results.length < 1) {
+					results.push(result);
+				} else {
+					for (let n = results.length - 1; n >= 0; n--) {
+						const probe = results[n];
+						const probeTime = new Date(0, 0, 0, probe.date.getHours(), probe.date.getMinutes(), probe.date.getSeconds());
+						const resultTime = new Date(0, 0, 0, result.date.getHours(), result.date.getMinutes(), result.date.getSeconds());
+						const timeless = probeTime.getTime() < resultTime.getTime();
+						if (n === 0 && !timeless) {
+							results.splice(0, 0, result);
+							break;
+						}
+						if (probe.bar !== result.bar || timeless || n === 0) {
+							results.splice(n + 1, 0, result);
+							break;
+						}
+					}
+				}
 				// console.log(result); // debug
 			}
 			this.tableRows = results;
@@ -315,35 +385,52 @@ export default class Drinker extends Vue {
 		const response = await axios.get(fullURL);
 		if (response.status === 200) {
 			const rows: any[] = response.data as any[];
+			this.spendingData = rows;
+			this.setSpendingChart();
+		} else {
+			console.error("Failed to get data");
+		}
+	}
 
-			const bars: string[] = [];
-			const tips: number[] = [];
-			const totals: number[] = [];
-			for (const row of rows) {
+	private setSpendingChart() {
+		const bars: string[] = [];
+		const tips: number[] = [];
+		const totals: number[] = [];
+		for (const row of this.spendingData) {
+			const date = new Date(row.date);
+			if (date >= this.spendBeginDate_ && date <= this.spendEndDate_) {
 				bars.push(row.bar);
 				const tip: number = parseFloat(row.sum_tip);
 				const total: number = parseFloat(row.sum_total);
 				tips.push(tip);
 				totals.push(total);
 			}
-			this.spendingChartData = {
-				labels: bars,
-				datasets: [
-					{
-						label: "Paid (no tip)",
-						backgroundColor: "rgba(255, 0, 0, 0.65)",
-						data: totals,
-					},
-					{
-						label: "Tip",
-						backgroundColor: "rgba(192, 192, 0, 0.65)",
-						data: tips,
-					},
-				],
-			};
-		} else {
-			console.error("Failed to get data");
 		}
+		this.spendingChartData = {
+			labels: bars,
+			datasets: [
+				{
+					label: "Paid (no tip)",
+					backgroundColor: "rgba(255, 0, 0, 0.65)",
+					data: totals,
+				},
+				{
+					label: "Tip",
+					backgroundColor: "rgba(192, 192, 0, 0.65)",
+					data: tips,
+				},
+			],
+		};
+	}
+
+	private onBeginDatePicked() {
+		this.showBeginDatePicker = false;
+		this.setSpendingChart();
+	}
+
+	private onEndDatePicked() {
+		this.showEndDatePicker = false;
+		this.setSpendingChart();
 	}
 
 	private async retrieveDrinkerData(): Promise<void> {

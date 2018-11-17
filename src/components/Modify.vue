@@ -48,7 +48,13 @@
 					</v-flex>
 				</v-layout>
 				<v-divider class="my-3" v-show="showWhereInput"></v-divider>
-				<v-subheader v-show="showWhereInput">FIND RECORDS WITH FIELD VALUES MATCHING</v-subheader>
+				<v-subheader v-show="showWhereInput">
+					FIND RECORDS WITH FIELD VALUES MATCHING
+					<v-tooltip top>
+						<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+						<span>The selected operation will be performed on records that match the set of values below.</span>
+					</v-tooltip>
+				</v-subheader>
 				<v-flex class="px-3" v-show="showWhereInput">
 					<v-text-field
 						v-for="(column, index) in columns"
@@ -59,7 +65,13 @@
 					></v-text-field>
 				</v-flex>
 				<v-divider class="my-3" v-show="showSetInput"></v-divider>
-				<v-subheader v-show="showSetInput">SET FIELD VALUES TO</v-subheader>
+				<v-subheader v-show="showSetInput">
+					SET FIELD VALUES TO
+					<v-tooltip top>
+						<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
+						<span>These are the set of new column values that will be applied to the row.</span>
+					</v-tooltip>
+				</v-subheader>
 				<v-flex class="px-3" v-show="showSetInput">
 					<v-text-field
 						v-for="(column, index) in columns"
