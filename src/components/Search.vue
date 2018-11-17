@@ -37,7 +37,7 @@
 								v-model="query"
 								auto-grow
 								autofocus
-								solo
+								outline
 								append-icon="clear"
 								@click:append="clearQueryInput"
 							></v-textarea>
@@ -64,14 +64,12 @@
 								class="primary"
 								@click="valueCallback">
 								Execute
-								<v-icon class="ml-2">
-									send
-								</v-icon>
 							</v-btn>
 						</v-card-actions>
 					</v-card>
 				</v-flex>
 				<v-flex xs12>
+					<v-divider class="my-4" v-show="dataRows.length > 0"></v-divider>
 					<v-card v-show="dataRows.length > 0">
 						<v-card-title class="title">
 							RESULTS
@@ -130,6 +128,9 @@ import axios from "axios";
 import { Env } from "@/env";
 import { colors } from "vuetify/lib";
 
+import { Table, BarTable, BillContainsTable, DrinkersTable, FrequentsTable,
+	HoursTable, ItemsTable, LikesTable, SellsTable, TransactionsTable, TestTable } from "@/util/tables";
+
 @Component({
 	components: {
 	},
@@ -148,88 +149,34 @@ export default class Search extends Vue {
 		return dataHeaders;
 	}
 
-	private schema: any[] = [
-		{
-			name: "bars",
-			children: [
-				{ name: "name: varchar(45)" },
-				{ name: "license: varchar(100)" },
-				{ name: "city: varchar(45)" },
-				{ name: "state: varchar(45)" },
-				{ name: "addr: varchar(100)" },
-				{ name: "phone: varchar(20)" },
-			],
-		},
-		{
-			name: "billContains",
-			children: [
-				{ name: "trans_id: varchar(20)" },
-				{ name: "item: varchar(45)" },
-			],
-		},
-		{
-			name: "drinkers",
-			children: [
-				{ name: "name: varchar(45)" },
-				{ name: "city: varchar(45)" },
-				{ name: "state: varchar(45)" },
-				{ name: "addr: varchar(100)" },
-				{ name: "phone: varchar(20)" },
-			],
-		},
-		{
-			name: "frequents",
-			children: [
-				{ name: "drinker: varchar(45)" },
-				{ name: "bar: varchar(45)" },
-			],
-		},
-		{
-			name: "hours",
-			children: [
-				{ name: "bar: varchar(45)" },
-				{ name: "opens: time" },
-				{ name: "closes: time" },
-				{ name: "day: tinyint(4)" },
-			],
-		},
-		{
-			name: "items",
-			children: [
-				{ name: "item_name: varchar(45)" },
-				{ name: "manufacturer: varchar(45)" },
-				{ name: "item_type: varchar(10)" },
-			],
-		},
-		{
-			name: "likes",
-			children: [
-				{ name: "drinker: varchar(45)" },
-				{ name: "item: varchar(45)" },
-			],
-		},
-		{
-			name: "sells",
-			children: [
-				{ name: "bar: varchar(45)" },
-				{ name: "item: varchar(45)" },
-				{ name: "price: decimal(13,2)" },
-			],
-		},
-		{
-			name: "transaction",
-			children: [
-				{ name: "trans_id: varchar(20)" },
-				{ name: "date: datetime" },
-				{ name: "day: tinyint(4)" },
-				{ name: "time: time" },
-				{ name: "bar: varchar(45)" },
-				{ name: "drinker: varchar(45)" },
-				{ name: "tip: decimal(13,2)" },
-				{ name: "total: decimal(13,2)" },
-			],
-		},
-	];
+	private get schema(): any[] {
+		const results: any[] = [];
+		const allTables: Table[] = [
+			TestTable,
+			BarTable,
+			BillContainsTable,
+			DrinkersTable,
+			FrequentsTable,
+			HoursTable,
+			ItemsTable,
+			LikesTable,
+			SellsTable,
+			TransactionsTable,
+		];
+
+		for (const table of allTables) {
+			const children: any[] = [];
+			for (const header of table.headers) {
+				children.push( { name : `${header.name}: ${header.datatype}` }) ;
+			}
+			const tableSchema = {
+				name: table.name,
+				children,
+			};
+			results.push(tableSchema);
+		}
+		return results;
+	}
 
 	private query: string = "";
 	private dbMessage: string = "";

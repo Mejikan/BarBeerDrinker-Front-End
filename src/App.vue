@@ -32,9 +32,9 @@
 			</v-btn>
 			<v-btn
 				flat
-				to="/search"
+				to="/interface"
 			>
-				<span class="mr-2">Search</span>
+				<span class="mr-2">Interface</span>
 			</v-btn>
 			<v-menu offset-y>
 				<v-btn
