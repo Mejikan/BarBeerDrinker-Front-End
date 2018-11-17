@@ -15,7 +15,7 @@
 					<v-container fluid fill-height>
 						<v-layout justify-center align-center>
 							<div
-								class="text-xs-center pa-3 white--text display-4 font-weight-bold title-font"
+								:class="titleFontClass"
 							>
 								{{ greetings[i] }}
 							</div>
@@ -52,6 +52,19 @@ export default class Home extends Vue {
 		"WELL-AGED INVENTORY",
 		"UNRIVALED SELECTION",
 	];
+
+	private get titleFontClass(): string {
+		const bp = this.$vuetify.breakpoint.name;
+		if (bp === "xs") {
+			return "text-xs-center pa-2 white--text display-1 font-weight-medium title-font";
+		} else if (bp === "sm") {
+			return "text-xs-center pa-3 white--text display-2 font-weight-medium title-font";
+		} else if (bp === "md") {
+			return "text-xs-center pa-3 white--text display-3 font-weight-bold title-font";
+		} else {
+			return "text-xs-center pa-3 white--text display-4 font-weight-bold title-font";
+		}
+	}
 }
 </script>
 
