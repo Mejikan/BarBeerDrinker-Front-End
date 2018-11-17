@@ -44,6 +44,12 @@
 			>
                 	High Volume Days
             </v-tab>
+            <v-tab 
+				:key="5"
+				@change="getBarData"
+			>
+                	High Volume Hours
+            </v-tab>
         </v-tabs>
     </v-toolbar>
 
@@ -92,6 +98,18 @@
 					<BarChart
 						:chartData="mvTimesChartData"
 						:options="mvTimesChartOptions"
+					/>
+				</v-card-text>
+			</v-card>
+        </v-tab-item>
+		<v-tab-item :key="5">
+            <v-card>
+				<v-card-title>
+				</v-card-title>
+				<v-card-text>
+					<BarChart
+						:chartData="mvTimesChartData2"
+						:options="mvTimesChartOptions2"
 					/>
 				</v-card-text>
 			</v-card>
@@ -196,6 +214,25 @@ export default class Bar extends Vue {
 		},
 	};
 
+	private mvTimesChartData2: any = {};
+
+	private mvTimesChartOptions2: any = {
+		responsive: true,
+		maintainAspectRatio: true,
+		scales: {
+			xAxes: [
+				{
+					ticks: { autoSkip: false },
+				},
+			],
+			yAxes: [
+				{
+					ticks: { beginAtZero: true },
+				},
+			],
+		},
+	};
+
 	private dayNumber(dayNumber: number ): string {
 		let result: string = "";
 		if (dayNumber === 1) {
@@ -269,6 +306,10 @@ export default class Bar extends Vue {
 				group by t.day
 				order by Revenue desc`;
 					}
+
+	private queryTopTimes2(Bar5: string): string {
+		return `${Bar5}`;
+				}
 
 	private async setUpTopSpenders(bar: string): Promise<void> {
 		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
@@ -386,11 +427,41 @@ export default class Bar extends Vue {
 		}
 	}
 
+	private async setUpTopTimes2(bar: string): Promise<void> {
+		let fullURL: string = `${Env.SITE_API_DOMAIN}/sql?q=`;
+		fullURL += encodeURIComponent(this.queryTopTimes(this.bar));
+		const response = await axios.get(fullURL);
+		if (response.status === 200) {
+			console.log(response.data);
+
+			const rows: any[] = response.data as any[];
+			const barDay: string[] = [];
+			const barRevenue: number[] = [];
+			for (const row of rows) {
+				barDay.push(this.dayNumber(row.day));
+				barRevenue.push(row.Revenue);
+			}
+			this.mvTimesChartData = {
+				labels: barDay,
+				datasets: [
+					{
+						label: "Revenue per day",
+						backgroundColor: "rgba(0, 127, 255, 0.65)",
+						data: barRevenue,
+					},
+				],
+			};
+		} else {
+		console.error("Failed to get data");
+		}
+	}
+
 	private async getBarData(): Promise<void> {
 	this.setUpTopSpenders(this.bar);
 	this.setUpTopBeers(this.bar);
 	this.setUpTopManufacturers(this.bar);
 	this.setUpTopTimes(this.bar);
+	this.setUpTopTimes2(this.bar);
 	}
 
 	private mounted() {
