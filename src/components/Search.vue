@@ -330,12 +330,11 @@ export default class Search extends Vue {
 
 	private async verifyQuery3() {
 		// Detecting transactions after hours
-		this.query = `SELECT t.trans_id
-			FROM BarBeerDrinker.transactions t
-			WHERE EXISTS
-			(SELECT b.name
-			FROM BarBeerDrinker.bars b
-			WHERE b.name = t.bar & t.time < b.opens & t.time > b.closes)`;
+		this.query = `SELECT *
+					FROM BarBeerDrinker.sells s1, BarBeerDrinker.sells s2, BarBeerDrinker.sells s3, BarBeerDrinker.sells s4
+					WHERE s1.bars <> s2.bars && s1.bars = s3.bars && s2.bars = s4.bars
+						&& s1.item = s3.item && s2.item = s4.item
+						&& s1.price > s2.price && s3.price < s4.price limit 1`;
 	}
 }
 </script>
