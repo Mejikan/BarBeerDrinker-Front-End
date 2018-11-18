@@ -88,6 +88,7 @@
 								append-icon="clear"
 								@click:append="clearQueryInput"
 							></v-textarea>
+
 							<v-subheader>
 								Query Response
 								<v-tooltip top>
@@ -312,19 +313,19 @@ export default class Search extends Vue {
 
 	private async verifyQuery1() {
 		// Detecting transactions after hours
-		this.query = `SELECT t.trans_id
-			FROM BarBeerDrinker.transactions t
-			WHERE EXISTS
-			(SELECT b.name
-			FROM BarBeerDrinker.bars b
-			WHERE b.name = t.bar & t.time < b.opens & t.time > b.closes);`;
+		this.query = `SELECT *
+				from BarBeerDrinker.transactions t, BarBeerDrinker.hours h
+				where hour(time(t.date)) <= h.closes
+					&& hour(time(t.date)) >= h.opens
+					&& h.bar = t.bar`;
 	}
 
 	private async verifyQuery2() {
 		// Detecting drinkers frequenting out of state
-		this.query = `SELECT f.drinker
-			FROM BarBeerDrinker.frequents f, BarBeerDrinker.bars b, BarBeerDrinker.drinkers d
-			WHERE f.drinker = d.name & f.bar = b.name & d.state != b.state;`;
+		this.query = `SELECT f.bar, f.drinker
+				FROM BarBeerDrinker.frequents f, BarBeerDrinker.bars b, BarBeerDrinker.drinkers d
+				where f.bar = b.name && f.drinker = d.name
+					&& b.state <> d.state`;
 	}
 
 	private async verifyQuery3() {
