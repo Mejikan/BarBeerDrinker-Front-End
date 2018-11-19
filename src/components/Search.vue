@@ -61,7 +61,10 @@
 								Verification Queries
 								<v-tooltip top>
 									<v-icon slot="activator" class="ml-2" color="info">information</v-icon>
-									<span>(Expand to show more) Selecting a verification query will insert the query below.</span>
+									<span>
+										(Expand to show more) Selecting a verification query will insert the query below.
+										Each response should return 0 rows.
+									</span>
 								</v-tooltip>
 							</v-subheader>
 							<div class="text-xs-center">
@@ -183,7 +186,7 @@ import { Env } from "@/env";
 import { colors } from "vuetify/lib";
 
 import { Table, BarTable, BillContainsTable, DrinkersTable, FrequentsTable,
-	HoursTable, ItemsTable, LikesTable, SellsTable, TransactionsTable, TestTable } from "@/util/tables";
+	HoursTable, ItemsTable, LikesTable, SellsTable, TransactionsTable } from "@/util/tables";
 
 @Component({
 	components: {
@@ -206,7 +209,7 @@ export default class Search extends Vue {
 	private get schema(): any[] {
 		const results: any[] = [];
 		const allTables: Table[] = [
-			TestTable,
+			// TestTable,
 			BarTable,
 			BillContainsTable,
 			DrinkersTable,
@@ -313,28 +316,35 @@ export default class Search extends Vue {
 
 	private async verifyQuery1() {
 		// Detecting transactions after hours
-		this.query = `SELECT *
-				from BarBeerDrinker.transactions t, BarBeerDrinker.hours h
-				where hour(time(t.date)) <= h.closes
-					&& hour(time(t.date)) >= h.opens
-					&& h.bar = t.bar`;
+		this.query = `SELECT * FROM BarBeerDrinker.transactions t,
+			(SELECT h.*, IF(hour(h.closes) < hour(h.opens), 1, 0) AS flag
+			FROM BarBeerDrinker.hours h) h
+			WHERE (
+            ( h.flag = 0 && (( hour(time(t.date)) >= hour(h.closes) || hour(time(t.date)) < hour(h.opens) )
+				&& h.bar = t.bar && (h.day-1) = dayofweek(t.date)) ) OR
+			( h.flag = 1 && (( hour(time(t.date)) >= hour(h.closes) && hour(time(t.date)) < hour(h.opens) )
+				&& h.bar = t.bar && (h.day-1) = dayofweek(t.date)) ) );`;
+		// this.query = `SELECT *
+		// 		from BarBeerDrinker.transactions t, BarBeerDrinker.hours h
+		// 		where hour(time(t.date)) <= h.closes
+		// 			&& hour(time(t.date)) >= h.opens
+		// 			&& h.bar = t.bar`;
 	}
 
 	private async verifyQuery2() {
 		// Detecting drinkers frequenting out of state
-		this.query = `SELECT f.bar, f.drinker
-				FROM BarBeerDrinker.frequents f, BarBeerDrinker.bars b, BarBeerDrinker.drinkers d
-				where f.bar = b.name && f.drinker = d.name
-					&& b.state <> d.state`;
+		this.query = `SELECT *
+			FROM BarBeerDrinker.frequents f, BarBeerDrinker.bars b, BarBeerDrinker.drinkers d
+			WHERE d.name = f.drinker && b.name = f.bar && b.state <> d.state;`;
 	}
 
 	private async verifyQuery3() {
 		// Detecting transactions after hours
 		this.query = `SELECT *
-					FROM BarBeerDrinker.sells s1, BarBeerDrinker.sells s2, BarBeerDrinker.sells s3, BarBeerDrinker.sells s4
-					WHERE s1.bars <> s2.bars && s1.bars = s3.bars && s2.bars = s4.bars
-						&& s1.item = s3.item && s2.item = s4.item
-						&& s1.price > s2.price && s3.price < s4.price limit 1`;
+			FROM BarBeerDrinker.sells s1, BarBeerDrinker.sells s2, BarBeerDrinker.sells s3, BarBeerDrinker.sells s4
+			WHERE s1.bar <> s2.bar && s1.bar = s3.bar && s2.bar = s4.bar
+				&& s1.item = s3.item && s2.item = s4.item
+				&& s1.price > s2.price && s3.price < s4.price limit 1`;
 	}
 }
 </script>

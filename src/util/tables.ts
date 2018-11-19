@@ -67,16 +67,15 @@ export const SellsTable = new Table("sells", [
 export const TransactionsTable = new Table("transactions", [
 	{ name: "trans_id", datatype: "varchar(20)" },
 	{ name: "date", datatype: "datetime" },
-	{ name: "day", datatype: "tinyint(4)" },
 	{ name: "bar", datatype: "varchar(45)" },
 	{ name: "drinker", datatype: "varchar(45)" },
 	{ name: "tip", datatype: "decimal(13,2)" },
 	{ name: "total", datatype: "decimal(13,2)" },
 ]);
 
-export const TestTable = new Table("test", [
-	{ name: "id", datatype: "int(11)" },
-	{ name: "drinker", datatype: "varchar(45)" },
-	{ name: "bar", datatype: "varchar(45)" },
-	{ name: "phone", datatype: "varchar(45)" },
-]);
+// export const TestTable = new Table("test", [
+// 	{ name: "id", datatype: "int(11)" },
+// 	{ name: "drinker", datatype: "varchar(45)" },
+// 	{ name: "bar", datatype: "varchar(45)" },
+// 	{ name: "phone", datatype: "varchar(45)" },
+// ]);

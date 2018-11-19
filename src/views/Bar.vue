@@ -116,6 +116,18 @@
         </v-tab-item>
     </v-tabs-items>
     <!-- <v-btn @click="getStuff" color="success">Success</v-btn> -->
+	<v-btn
+		round
+		large
+		color="orange accent-2 white--text"
+		bottom
+		left
+		fixed
+		to="/interface?modify=1"
+	>
+		Add Transaction
+		<v-icon>add</v-icon>
+	</v-btn>
 </div>
 </template>
 

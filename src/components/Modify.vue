@@ -111,7 +111,7 @@ import { Env } from "@/env";
 import axios from "axios";
 
 import { Table, BarTable, BillContainsTable, DrinkersTable, FrequentsTable,
-	HoursTable, ItemsTable, LikesTable, SellsTable, TransactionsTable, TestTable } from "@/util/tables";
+	HoursTable, ItemsTable, LikesTable, SellsTable, TransactionsTable } from "@/util/tables";
 
 @Component({
 	components: {
@@ -125,7 +125,7 @@ export default class Modify extends Vue {
 	];
 
 	private tables: Table[] = [
-		TestTable,
+		// TestTable,
 		BarTable,
 		BillContainsTable,
 		DrinkersTable,
@@ -302,6 +302,12 @@ export default class Modify extends Vue {
 		} finally {
 			this.showDialog = true;
 			this.allowQuery = true;
+		}
+	}
+
+	private async mounted() {
+		if (this.$route.query.modify) {
+			this.table = "transactions";
 		}
 	}
 }
