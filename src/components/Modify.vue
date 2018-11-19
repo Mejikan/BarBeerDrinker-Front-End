@@ -304,5 +304,11 @@ export default class Modify extends Vue {
 			this.allowQuery = true;
 		}
 	}
+
+	private async mounted() {
+		if (this.$route.query.modify) {
+			this.table = "transactions";
+		}
+	}
 }
 </script>

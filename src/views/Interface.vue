@@ -1,7 +1,7 @@
 <template>
 	<div class="interface">
 		<v-container fluid>
-			<v-tabs centered icons-and-text>
+			<v-tabs centered icons-and-text v-model="tabs">
 				<v-tab key="search">
 					Search
 					<v-icon>search</v-icon>
@@ -53,5 +53,12 @@ import Modify from "@/components/Modify.vue";
 	},
 })
 export default class Interface extends Vue {
+	private tabs: number = 0;
+
+	private async mounted() {
+		if (this.$route.query.modify) {
+			this.tabs = 1;
+		}
+	}
 }
 </script>

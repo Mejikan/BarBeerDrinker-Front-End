@@ -2,7 +2,7 @@
 	<v-app :dark="useDark">
 		<v-toolbar app>
 			<v-toolbar-title class="headline text-uppercase">
-				<span>Liquor Insights </span>
+				<span>Drinker Insights </span>
 				<span class="font-weight-light">A 336 PROJECT</span>
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
