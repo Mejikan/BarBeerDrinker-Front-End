@@ -121,8 +121,8 @@
 		large
 		color="orange accent-2 white--text"
 		bottom
-		right
-		absolute
+		left
+		fixed
 		to="/interface?modify=1"
 	>
 		Add Transaction

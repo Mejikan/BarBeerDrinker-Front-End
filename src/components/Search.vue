@@ -186,7 +186,7 @@ import { Env } from "@/env";
 import { colors } from "vuetify/lib";
 
 import { Table, BarTable, BillContainsTable, DrinkersTable, FrequentsTable,
-	HoursTable, ItemsTable, LikesTable, SellsTable, TransactionsTable, TestTable } from "@/util/tables";
+	HoursTable, ItemsTable, LikesTable, SellsTable, TransactionsTable } from "@/util/tables";
 
 @Component({
 	components: {
@@ -209,7 +209,7 @@ export default class Search extends Vue {
 	private get schema(): any[] {
 		const results: any[] = [];
 		const allTables: Table[] = [
-			TestTable,
+			// TestTable,
 			BarTable,
 			BillContainsTable,
 			DrinkersTable,
@@ -316,11 +316,14 @@ export default class Search extends Vue {
 
 	private async verifyQuery1() {
 		// Detecting transactions after hours
-		this.query = `SELECT *
-			from BarBeerDrinker.transactions t, BarBeerDrinker.hours h
-			where (hour(time(t.date)) >= hour(h.closes)
-				|| hour(time(t.date)) < hour(h.opens))
-				&& h.bar = t.bar && h.day = dayofweek(t.date);`;
+		this.query = `SELECT * FROM BarBeerDrinker.transactions t,
+			(SELECT h.*, IF(hour(h.closes) < hour(h.opens), 1, 0) AS flag
+			FROM BarBeerDrinker.hours h) h
+			WHERE (
+            ( h.flag = 0 && (( hour(time(t.date)) >= hour(h.closes) || hour(time(t.date)) < hour(h.opens) )
+				&& h.bar = t.bar && (h.day-1) = dayofweek(t.date)) ) OR
+			( h.flag = 1 && (( hour(time(t.date)) >= hour(h.closes) && hour(time(t.date)) < hour(h.opens) )
+				&& h.bar = t.bar && (h.day-1) = dayofweek(t.date)) ) );`;
 		// this.query = `SELECT *
 		// 		from BarBeerDrinker.transactions t, BarBeerDrinker.hours h
 		// 		where hour(time(t.date)) <= h.closes
