@@ -67,7 +67,6 @@ export const SellsTable = new Table("sells", [
 export const TransactionsTable = new Table("transactions", [
 	{ name: "trans_id", datatype: "varchar(20)" },
 	{ name: "date", datatype: "datetime" },
-	{ name: "day", datatype: "tinyint(4)" },
 	{ name: "bar", datatype: "varchar(45)" },
 	{ name: "drinker", datatype: "varchar(45)" },
 	{ name: "tip", datatype: "decimal(13,2)" },
