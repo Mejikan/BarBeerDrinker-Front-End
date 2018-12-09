@@ -1,4 +1,8 @@
-# client
+# BarBeerDrinker Front End
+### Class Project
+
+This repository contains the code which runs the web interface for the BarBeerDrinker project.
+It allows users to view the data graphically as well as make their own SQL queries or modifications.
 
 ## Project setup
 ```
