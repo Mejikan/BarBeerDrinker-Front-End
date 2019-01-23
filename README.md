@@ -4,6 +4,8 @@
 This repository contains the code which runs the web interface for the BarBeerDrinker project.
 It allows users to view the data graphically as well as make their own SQL queries or modifications.
 
+You will also need the [backend](https://github.com/Mejikan/BarBeerDrinker-Back-End).
+
 ## Project setup
 ```
 npm install
